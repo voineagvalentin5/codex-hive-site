@@ -1,0 +1,76 @@
+<script>window.onmessage = function(event) {event.source.postMessage({iframeId: event.data, scrollHeight: document.body.getBoundingClientRect().height || document.body.scrollHeight}, event.origin);};</script><body style='margin: 0'><div id="hs" style="max-width:1000px;margin:0 auto;padding:32px 16px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#F3F5F7;background:#0F1117;">
+<style>
+#hs *{box-sizing:border-box}
+#hs h1{font-size:44px;line-height:1.1;margin:0 0 8px;color:#F2A900;letter-spacing:.02em}
+#hs .eyebrow{color:#9AA3AF;letter-spacing:.2em;font-size:12px;text-transform:uppercase;margin:0 0 10px}
+#hs .lead{font-size:17px;line-height:1.6;color:#C9CFD8;max-width:760px;margin:0 0 8px}
+#hs .note{font-size:13px;color:#9AA3AF;margin:0 0 28px}
+#hs h2{font-size:24px;margin:40px 0 14px;color:#F3F5F7;border-bottom:1px solid #1E232B;padding-bottom:8px}
+#hs h2 span{color:#F2A900}
+#hs .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+#hs .card{background:#12151C;border:1px solid #1E232B;border-radius:14px;padding:20px}
+#hs .card h3{margin:0 0 4px;font-size:20px;color:#F3F5F7}
+#hs .card .meta{font-size:12px;color:#F2A900;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px}
+#hs .card p{margin:0 0 10px;font-size:14.5px;line-height:1.55;color:#C9CFD8}
+#hs a{color:#F2A900}
+#hs .rel iframe{width:100%;height:240px;border:0;border-radius:10px;margin-top:6px}
+#hs .soon{display:inline-block;margin-top:6px;padding:4px 10px;border:1px solid #C87600;border-radius:999px;font-size:12px;color:#F2A900}
+#hs .ap-head{display:flex;align-items:center;gap:16px;margin:0 0 12px}
+#hs .ap-av{width:84px;height:84px;border-radius:50%;object-fit:cover;flex:none;border:1px solid #1E232B}
+#hs .ap-wm{display:block;flex:1 1 auto;min-width:0;width:100%;max-width:420px;height:auto}
+#hs .cover{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;margin:0 0 12px}
+#hs .foot{margin-top:36px;font-size:13px;color:#9AA3AF}
+#hs .as-mono{width:84px;height:84px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid #C87600;background:radial-gradient(circle at 30% 30%,#2A2140,#12151C);color:#F2A900;font:600 28px Georgia,serif;letter-spacing:.06em}
+#hs .as-name{font:400 30px/1 Georgia,'Times New Roman',serif;letter-spacing:.32em;color:#F3F5F7}
+#hs .as-name span{display:block;margin-top:6px;font:italic 26px/1 Georgia,serif;letter-spacing:.04em;color:#F28C6A}
+</style>
+
+<p class="eyebrow">A division of Codex Hive Labs</p>
+<h1>Hive Buzz Records</h1>
+<p style="color:#F2A900;letter-spacing:.3em;font-size:14px;margin:0 0 16px">FROM THE HIVE.</p>
+<p class="lead">Hive Buzz Records is the record label of Codex Hive Labs. It's built to release music from multiple artists and genres, with AI-assisted production, original lyrics and a lot of revision before anything goes out.</p>
+
+
+<h2>Artists <span>&bull;</span></h2>
+<div class="grid">
+  <!-- ARTIST CARD TEMPLATE: copy this block to add another artist -->
+  <div class="card">
+    <p class="meta">First artist</p>
+    <div class="ap-head"><img class="ap-av" src="/assets/bd5bd578_valenvox-avatar.jpg" alt="ValenVox avatar"><img class="ap-wm" src="/assets/ee263c0a_valenvox-wordmark.png" alt="ValenVox"></div>
+    <h3 style="position:absolute;left:-9999px">ValenVox</h3>
+    <p>The music project of Valentin Voineag, a Michigan-based songwriter who writes his own lyrics and builds each track with AI music tools. The catalog runs from cinematic orchestral scores and Romanian folk instrumentals to worship pop, art-pop ballads and synthwave: songs about faith, longing, ascent and home.</p>
+    <p><a href="https://suno.com/@theartificialpulse" target="_blank" rel="noopener">Follow on Suno &rarr;</a> &nbsp;&middot;&nbsp; <a href="https://soundcloud.com/valentin-voineag-386211349" target="_blank" rel="noopener">Listen on SoundCloud &rarr;</a></p>
+  </div>
+  <div class="card">
+    <p class="meta">Artist</p>
+    <div class="ap-head"><img class="ap-av" src="/assets/909f1471_asher-skye-avatar.jpg" alt="Asher Skye avatar"><div class="as-name">ASHER<span>Skye</span></div></div>
+    <h3 style="position:absolute;left:-9999px">Asher Skye</h3>
+    <p>Asher Skye is a Hive Buzz Records artist. His songs are dreamy, late-night pop about gravity, light and finding your way home.</p>
+    <p><a href="#as-rel">Listen to Gravity and Runaway Lights &darr;</a></p>
+  </div>
+  <!-- END ARTIST CARD -->
+</div>
+
+<h2>Releases <span>&bull;</span></h2>
+<div class="grid">
+  <!-- RELEASE CARD TEMPLATE: copy this block to add a release (replace the iframe src with the song's Suno embed URL) -->
+  <div class="card rel"><h3>Celestial Promise</h3><p class="meta">ValenVox</p><iframe src="https://suno.com/embed/0d0e0c85-4f1d-4af6-a4c0-a4f600019b50" allow="autoplay"></iframe></div>
+  <div class="card rel"><h3>WILD ADVENTURES</h3><p class="meta">ValenVox</p><iframe src="https://suno.com/embed/042f3784-58bf-4fd0-91c8-5f6d4fca343a" allow="autoplay"></iframe></div>
+  <div class="card rel"><h3 id="as-rel">Gravity</h3><p class="meta">Asher Skye</p><iframe src="https://suno.com/embed/3d2733d9-92c5-44b8-900d-d52a9dbad387" allow="autoplay"></iframe></div>
+  <div class="card rel"><h3>My Younger Self</h3><p class="meta">ValenVox</p><iframe src="https://suno.com/embed/8f192d17-cfe4-4fee-be60-c1c1e9204b2c" allow="autoplay"></iframe></div>
+  <div class="card rel"><h3>Runaway Lights (Remastered)</h3><p class="meta">Asher Skye</p><iframe src="https://suno.com/embed/1157e2f0-5de0-47c3-b42a-9e15391fb9a3" allow="autoplay"></iframe></div>
+  <!-- END RELEASE CARD -->
+</div>
+
+<h2>Coming soon <span>&bull;</span></h2>
+<div class="grid">
+  <div class="card"><img class="cover" src="/assets/a2344dd3_chasing-dawn-cover-valenvox.jpg" alt="Chasing Dawn cover art"><h3>Chasing Dawn</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+  <div class="card"><h3>Heaven Has a Human Voice</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+  <div class="card"><h3>Every Beautiful Thing</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+  <div class="card"><h3>Keep Following Me</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+  <div class="card"><h3>Muntele de Sus</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+  <div class="card"><h3>Ascension</h3><p class="meta">ValenVox</p><span class="soon">Coming soon</span></div>
+</div>
+
+<p class="foot">Streaming releases coming soon. Hive Buzz Records is a division of Codex Hive Labs LLC.</p>
+</div></body>

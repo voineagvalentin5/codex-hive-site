@@ -1,0 +1,602 @@
+<script>window.onmessage = function(event) {event.source.postMessage({iframeId: event.data, scrollHeight: document.body.getBoundingClientRect().height || document.body.scrollHeight}, event.origin);};</script><body style='margin: 0'><!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Daphnis Wake</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one column. A dark orbital-frame view leads, transport and physics controls sit under it,
+   then a strip chart that shares the view's horizontal axis, then four short notes.
+   The two canvases stay dark in both themes (they are instrument displays); the page around them follows the theme. */
+:root{
+  --bg:#f2f4f3;
+  --surface:#ffffff;
+  --fg:#14191c;
+  --muted:#56626a;
+  --line:#d3d9d8;
+  --accent:#16697a;
+  --accent-fg:#ffffff;
+  --sky:#0b0e12;
+  --sky-fg:#c8d0d5;
+  --sky-dim:#2a323a;
+  --in:#4db3c6;
+  --mid:#8a8d88;
+  --out:#e5a23b;
+  --moon:#d9d3c3;
+  --trace:#ffffff;
+  --ff-display:"Archivo", system-ui, sans-serif;
+  --ff-body:"Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ff-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1215; --surface:#161c20; --fg:#e3e8ea; --muted:#98a4ab; --line:#29323a;
+    --accent:#6ec4d4; --accent-fg:#05161a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1215; --surface:#161c20; --fg:#e3e8ea; --muted:#98a4ab; --line:#29323a;
+  --accent:#6ec4d4; --accent-fg:#05161a;
+  color-scheme:dark;
+}
+
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--ff-body); font-size:15px; line-height:1.55;
+  padding-block:28px 56px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap{ max-width:1040px; margin:0 auto; display:grid; gap:22px; min-width:0 }
+.wrap > *{ min-width:0 }
+
+header h1{
+  margin:0; font-family:var(--ff-display); font-weight:700; font-stretch:125%;
+  font-size:clamp(28px, 6vw, 46px); line-height:1.05; letter-spacing:-0.01em; text-wrap:balance;
+}
+.lede{ margin:10px 0 0; max-width:64ch; font-size:16.5px; color:var(--muted); text-wrap:pretty }
+.meta{ margin:12px 0 0; font:400 12px var(--ff-mono); color:var(--muted); letter-spacing:.02em }
+
+.stage{ background:var(--sky); border-radius:6px; overflow:hidden; line-height:0 }
+.stage canvas{ display:block; width:100% }
+
+.key{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:wrap; gap:6px 20px; align-items:center;
+  font:400 12.5px var(--ff-mono); color:var(--muted);
+}
+.key li{ display:flex; align-items:center; gap:8px }
+.sw{ width:12px; height:12px; border-radius:2px; display:inline-block; flex:none }
+
+.caption{ margin:-8px 0 0; font-size:13px; color:var(--muted); max-width:78ch }
+
+.controls{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+  gap:16px 28px; align-items:end;
+}
+.transport{ display:flex; flex-wrap:wrap; gap:10px }
+.btn, .seg button{
+  appearance:none; font:500 14px var(--ff-body); color:var(--fg);
+  background:var(--surface); border:1px solid var(--line); border-radius:4px;
+  padding:8px 14px; min-height:40px; cursor:pointer;
+}
+.btn:hover, .seg button:hover{ border-color:var(--accent) }
+.btn.primary{ background:var(--accent); color:var(--accent-fg); border-color:var(--accent); min-width:84px }
+.seg{ display:inline-flex; border-radius:4px }
+.seg button{ border-radius:0 }
+.seg button:first-child{ border-radius:4px 0 0 4px }
+.seg button:last-child{ border-radius:0 4px 4px 0; border-left-width:0 }
+.seg button[aria-pressed="true"]{ background:var(--accent); color:var(--accent-fg); border-color:var(--accent) }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px }
+
+.ctl{ display:grid; gap:4px; min-width:0 }
+.ctl-top{ display:flex; justify-content:space-between; gap:12px; font-size:13px; color:var(--muted) }
+.ctl output{ font:500 12.5px var(--ff-mono); color:var(--fg); white-space:nowrap }
+input[type=range]{ width:100%; margin:0; min-height:28px; accent-color:var(--accent) }
+.chk{ display:flex; gap:10px; align-items:center; font-size:14px; min-height:40px }
+.chk input{ width:18px; height:18px; accent-color:var(--accent); margin:0 }
+
+.tracer{ display:grid; gap:14px }
+.tracer h2, .notes h2{ margin:0; font:700 20px var(--ff-display); font-stretch:112%; letter-spacing:-0.005em }
+.tracer p{ margin:0; max-width:74ch; color:var(--muted); font-size:14px }
+.tracer-ctl{ display:flex; flex-wrap:wrap; gap:14px 28px; align-items:end }
+.tracer-ctl .ctl{ flex:1 1 240px; max-width:380px }
+
+.readouts{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px 24px; margin:0 }
+.readouts dt{ font-size:12px; color:var(--muted); letter-spacing:.02em }
+.readouts dd{ margin:2px 0 0; font:500 15px var(--ff-mono); font-variant-numeric:tabular-nums; overflow-wrap:anywhere }
+.km{ color:var(--muted); font-weight:400; font-size:12.5px }
+
+.notes{ display:grid; gap:16px; border-top:1px solid var(--line); padding-top:22px }
+.notes-grid{ display:grid; grid-template-columns:1fr; gap:18px 36px }
+@media (min-width:760px){ .notes-grid{ grid-template-columns:1fr 1fr } }
+.notes h3{ margin:0 0 4px; font:600 15px var(--ff-body) }
+.notes p{ margin:0; font-size:14.5px; color:var(--muted); max-width:62ch; text-wrap:pretty }
+.foot{ margin:0; font:400 11.5px var(--ff-mono); color:var(--muted); line-height:1.6 }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Daphnis Wake</h1>
+    <p class="lede">A ring seen from Daphnis's own frame. Orbital shear carries particles past the moon, each one is pulled once as it goes by, and the pulls line up into the scalloped edge of the Keeler Gap.</p>
+    <p class="meta">Hill's equations · Ω = 1 · lengths in Hill radii of Daphnis (1 ≈ 4.7 km)</p>
+  </header>
+
+  <section aria-label="Simulation">
+    <div class="stage"><canvas id="sim" role="img" aria-label="Top-down view of ring particles streaming past the moon Daphnis, forming a standing wave pattern on both sides"></canvas></div>
+    <ul class="key" style="margin-top:12px">
+      <li><i class="sw" style="background:var(--in)"></i>pulled inward</li>
+      <li><i class="sw" style="background:var(--mid)"></i>on its original orbit</li>
+      <li><i class="sw" style="background:var(--out)"></i>pulled outward</li>
+      <li>Up is away from Saturn. Daphnis moves to the left.</li>
+    </ul>
+  </section>
+  <p class="caption">The radial direction is stretched ×<span id="stretch">3</span> so the ripples show. Streamlines join particles that started at the same distance. The dashed ellipse is Daphnis's Hill sphere, and the guide lines sit at 4 and 8 Hill radii, close to where the Keeler Gap edges lie.</p>
+
+  <section class="controls" aria-label="Controls">
+    <div class="transport">
+      <button class="btn primary" id="play" type="button" aria-pressed="true">Pause</button>
+      <button class="btn" id="restart" type="button">Replay formation</button>
+    </div>
+    <label class="ctl">
+      <span class="ctl-top"><span>Speed</span><output id="speedOut" for="speed">1×</output></span>
+      <input id="speed" type="range" min="0.25" max="3" step="0.25" value="1">
+    </label>
+    <label class="ctl">
+      <span class="ctl-top"><span>Moon mass</span><output id="massOut" for="mass">1× Daphnis</output></span>
+      <input id="mass" type="range" min="0.25" max="1.5" step="0.05" value="1">
+    </label>
+    <label class="chk"><input id="lines" type="checkbox" checked>Join particles into streamlines</label>
+  </section>
+
+  <section class="tracer" aria-label="Single particle">
+    <h2>Follow one particle</h2>
+    <p>The white dot above is a tracer. Its radial offset from its starting orbit is plotted here on the same horizontal axis, so the dot sits at the same place in both views.</p>
+    <div class="tracer-ctl">
+      <div class="seg" role="group" aria-label="Side of the moon">
+        <button id="sideOut" type="button" aria-pressed="true">Outer side</button>
+        <button id="sideIn" type="button" aria-pressed="false">Inner side</button>
+      </div>
+      <label class="ctl">
+        <span class="ctl-top"><span>Starting distance x₀</span><output id="x0Out" for="x0">4.0 Hill radii</output></span>
+        <input id="x0" type="range" min="3.5" max="7.5" step="0.1" value="4">
+      </label>
+    </div>
+    <div class="stage"><canvas id="plot" role="img" aria-label="Radial offset of the tracer particle plotted against position along the orbit"></canvas></div>
+    <dl class="readouts">
+      <div><dt>Wavelength, theory 3π|x₀|</dt><dd id="rLamT">-</dd></div>
+      <div><dt>Wavelength, simulated</dt><dd id="rLamS">-</dd></div>
+      <div><dt>Wave amplitude, linear theory</dt><dd id="rAmpT">-</dd></div>
+      <div><dt>Wave amplitude, simulated</dt><dd id="rAmpS">-</dd></div>
+    </dl>
+  </section>
+
+  <section class="notes" aria-label="Notes">
+    <h2>Reading the picture</h2>
+    <div class="notes-grid">
+      <div>
+        <h3>Why the flow runs both ways</h3>
+        <p>Orbital speed falls with distance from Saturn. In the moon's frame, particles outside its orbit drift backward and particles inside drift forward, at 1.5 Ω|x₀|. Daphnis is the fixed point in the middle.</p>
+      </div>
+      <div>
+        <h3>Where the wavelength comes from</h3>
+        <p>A passing particle is pulled once, then oscillates radially at the epicyclic frequency, which equals Ω for a Kepler orbit. In one oscillation it drifts 2π/Ω × 1.5Ω|x₀| = 3π|x₀| past the moon. Farther streamlines drift faster, so their ripples are longer.</p>
+      </div>
+      <div>
+        <h3>Size of the wiggle</h3>
+        <p>For weak encounters the amplitude is about 2.25 μ/x₀², where μ = G·M/Ω². It grows with the moon's mass and falls as 1/x₀². The readouts compare the simulation with this linear estimate, which loses accuracy for close, heavy encounters.</p>
+      </div>
+      <div>
+        <h3>What this model leaves out</h3>
+        <p>Collisions between particles, which damp the ripples downstream, ring self-gravity, and Daphnis's small orbital tilt, which adds the vertical ripples Cassini saw near equinox.</p>
+      </div>
+    </div>
+    <p class="foot">Daphnis mass 6.8×10¹³ kg and orbital radius 136,505 km (Wikipedia, citing Weiss et al. 2009) give a Hill radius near 4.7 km. Integration is 4th-order Runge-Kutta with a lightly softened moon potential.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* PHYSICS-START */
+const Phys = (function(){
+  const EPS = 0.35, E2 = EPS * EPS;
+  let AX = 0, AY = 0;
+
+  // Hill's equations with Omega = 1, plus a softened point-mass moon at the origin.
+  // x is radial (outward positive), y is along the orbit (prograde positive).
+  function force(x, y, u, v, mu){
+    const r2 = x*x + y*y + E2;
+    const f = mu / (r2 * Math.sqrt(r2));
+    AX = 2*v + 3*x - f*x;
+    AY = -2*u - f*y;
+  }
+
+  // One RK4 step of a single particle stored in s = [x, y, u, v].
+  function rk4(s, h, mu){
+    const x = s[0], y = s[1], u = s[2], v = s[3], h2 = 0.5*h;
+    force(x, y, u, v, mu); const au1 = AX, av1 = AY;
+    const x2 = x + h2*u,  y2 = y + h2*v,  u2 = u + h2*au1, v2 = v + h2*av1;
+    force(x2, y2, u2, v2, mu); const au2 = AX, av2 = AY;
+    const x3 = x + h2*u2, y3 = y + h2*v2, u3 = u + h2*au2, v3 = v + h2*av2;
+    force(x3, y3, u3, v3, mu); const au3 = AX, av3 = AY;
+    const x4 = x + h*u3,  y4 = y + h*v3,  u4 = u + h*au3,  v4 = v + h*av3;
+    force(x4, y4, u4, v4, mu); const au4 = AX, av4 = AY;
+    const c = h / 6;
+    s[0] = x + c*(u + 2*u2 + 2*u3 + u4);
+    s[1] = y + c*(v + 2*v2 + 2*v3 + v4);
+    s[2] = u + c*(au1 + 2*au2 + 2*au3 + au4);
+    s[3] = v + c*(av1 + 2*av2 + 2*av3 + av4);
+  }
+
+  // A sheet of particles on circular orbits, one row per starting distance.
+  function makeField(rows, perRow, yv){
+    const n = rows.length * perRow;
+    const F = { n, yv, rows, perRow,
+      X:new Float64Array(n), Y:new Float64Array(n), U:new Float64Array(n), V:new Float64Array(n),
+      X0:new Float64Array(n) };
+    for (let r = 0; r < rows.length; r++) for (let j = 0; j < perRow; j++) F.X0[r*perRow + j] = rows[r];
+    resetField(F);
+    return F;
+  }
+  function resetField(F){
+    const d = 2*F.yv / F.perRow;
+    for (let r = 0; r < F.rows.length; r++) for (let j = 0; j < F.perRow; j++){
+      const i = r*F.perRow + j, b = F.rows[r];
+      F.Y[i] = -F.yv + (j + 0.5)*d; F.X[i] = b; F.U[i] = 0; F.V[i] = -1.5*b;
+    }
+  }
+  // State of a particle that has been on a circular orbit at x0 until now, at upstream position y.
+  // It already feels the moon's distant pull, so it starts in the slowly varying (quasi-static) response
+  // to that pull instead of on a perfect circle, which would seed a spurious epicycle.
+  function inject(x0, mu, y, out){
+    const b = Math.abs(x0), s = x0 > 0 ? 1 : -1;
+    const tau = Math.abs(y) / (1.5*b), q = 1 + 2.25*tau*tau;
+    const G = -(2*mu/(3*b*b)) / Math.sqrt(q);        // integrated azimuthal pull
+    const Fx = -mu / (b*b*q*Math.sqrt(q));            // radial pull
+    out[0] = x0 + s*(2*G + Fx);
+    out[1] = y;
+    out[2] = 0;
+    out[3] = -1.5*x0 - s*(3*G + 2*Fx);
+    return out;
+  }
+
+  const s4 = [0, 0, 0, 0], s5 = [0, 0, 0, 0];
+  // Particles that leave the window are re-injected at the upstream edge.
+  function stepField(F, h, mu){
+    const n = F.n, yv = F.yv, L = 2*yv;
+    for (let i = 0; i < n; i++){
+      s4[0] = F.X[i]; s4[1] = F.Y[i]; s4[2] = F.U[i]; s4[3] = F.V[i];
+      rk4(s4, h, mu);
+      const y = s4[1];
+      if (y < -yv || y > yv){
+        inject(F.X0[i], mu, y < -yv ? y + L : y - L, s5);
+        F.X[i] = s5[0]; F.Y[i] = s5[1]; F.U[i] = s5[2]; F.V[i] = s5[3];
+      } else {
+        F.X[i] = s4[0]; F.Y[i] = y; F.U[i] = s4[2]; F.V[i] = s4[3];
+      }
+    }
+  }
+  function spinUp(F, mu, T, h){
+    const k = Math.max(1, Math.ceil(T / h)), hh = T / k;
+    for (let i = 0; i < k; i++) stepField(F, hh, mu);
+  }
+
+  // Full path of one particle. x0 > 0 starts upstream at +yv and drifts toward -y; x0 < 0 is the mirror image.
+  // The path continues to reach*yv downstream so wavelength and amplitude can be measured over several ripples.
+  function tracePath(x0, mu, yv, reach, h){
+    const dir = x0 > 0 ? -1 : 1;
+    const s = inject(x0, mu, -dir*yv, [0, 0, 0, 0]);
+    const ys = [s[1]], dxs = [s[0] - x0];
+    const ystop = yv*reach;
+    let kWin = -1, i = 0;
+    while (i < 400000){
+      rk4(s, h, mu); i++;
+      ys.push(s[1]); dxs.push(s[0] - x0);
+      if (kWin < 0 && dir*s[1] >= yv) kWin = i;
+      if (dir*s[1] >= ystop) break;
+    }
+    return { h, dir, x0, yv, n: ys.length, y: Float64Array.from(ys), dx: Float64Array.from(dxs), kWin: kWin < 0 ? i : kWin };
+  }
+
+  // Wavelength (mean spacing of maxima) and amplitude of the free wave left behind by the encounter.
+  // Close to the moon the particle is still being driven, so the amplitude is read from the far
+  // downstream stretch (beyond twice the window half-length), where only the free epicycle remains.
+  function analyse(p){
+    const { y, dx, n, dir, yv } = p;
+    let i0 = 0; while (i0 < n && dir*y[i0] < 0) i0++;
+    let iFar = i0; while (iFar < n && dir*y[iFar] < 2*yv) iFar++;
+    let mx = -Infinity, mn = Infinity;
+    for (let i = iFar; i < n; i++){ if (dx[i] > mx) mx = dx[i]; if (dx[i] < mn) mn = dx[i]; }
+    const amp = 0.5*(mx - mn), mid = 0.5*(mx + mn);
+    const pk = [];
+    for (let i = Math.max(i0, 1); i < n - 1; i++){
+      if (dx[i] > dx[i-1] && dx[i] >= dx[i+1] && dx[i] > mid + 0.5*amp) pk.push(Math.abs(y[i]));
+    }
+    const lambda = pk.length >= 2 ? (pk[pk.length-1] - pk[0]) / (pk.length - 1) : NaN;
+    return { amp, lambda, peaks: pk.length };
+  }
+
+  // Linear theory. Driving of the epicycle by the moon's radial and azimuthal pull gives
+  // A = (mu / x0^2) * [ (16/9) K0(2/3) + (8/9) K1(2/3) ].
+  function besselK(nu, z){
+    const h = 0.005; let s = 0;
+    for (let t = h/2; t < 14; t += h) s += Math.exp(-z*Math.cosh(t)) * Math.cosh(nu*t);
+    return s*h;
+  }
+  const KAMP = (16/9)*besselK(0, 2/3) + (8/9)*besselK(1, 2/3);
+  function linearAmp(mu, b){ return KAMP * mu / (b*b); }
+  function lambdaTheory(b){ return 3*Math.PI*Math.abs(b); }
+  function jacobi(s, mu){ const r2 = s[0]*s[0] + s[1]*s[1] + E2; return 0.5*(s[2]*s[2] + s[3]*s[3]) - 1.5*s[0]*s[0] - mu/Math.sqrt(r2); }
+
+  return { EPS, rk4, inject, makeField, resetField, stepField, spinUp, tracePath, analyse, linearAmp, lambdaTheory, KAMP, jacobi };
+})();
+/* PHYSICS-END */
+
+// ---------------------------------------------------------------- setup
+const KM = 4.66;                 // km per Hill radius of Daphnis
+const YV = 45, XV = 8.5;         // half-extent of the window: along orbit, radial (Hill radii)
+const MU0 = 3;                   // G*M/Omega^2 for Daphnis in these units (Hill radius = (mu/3)^(1/3) = 1)
+const BASE_RATE = 1.5;           // simulated time units per real second at 1x
+const NB = 33;
+const ROWS = []; for (let k = 0; k < 9; k++){ const b = 3.5 + 0.5*k; ROWS.push(b, -b); }
+const PER_ROW = 180;
+
+const $ = id => document.getElementById(id);
+const cv = $('sim'), cx = cv.getContext('2d');
+const pv = $('plot'), px = pv.getContext('2d');
+const css = getComputedStyle(document.documentElement);
+const tok = n => css.getPropertyValue(n).trim();
+const C = { sky: tok('--sky'), fg: tok('--sky-fg'), dim: tok('--sky-dim'), moon: tok('--moon'), trace: tok('--trace'), mono: tok('--ff-mono') };
+const reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+function hex(h){ h = h.replace('#', ''); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
+const PAL = [];
+(function(){
+  const a = hex(tok('--in')), m = hex(tok('--mid')), o = hex(tok('--out'));
+  for (let b = 0; b < NB; b++){
+    const t = b/(NB-1)*2 - 1; let c;
+    if (t < 0){ const k = t + 1; c = a.map((v,i) => v + (m[i]-v)*k); }
+    else { c = m.map((v,i) => v + (o[i]-v)*t); }
+    PAL.push('rgb(' + c.map(Math.round).join(',') + ')');
+  }
+})();
+
+const state = { playing: !reduce, speed: 1, mass: 1, mu: MU0, lines: true, side: 1, x0: 4.0, tt: 0 };
+const F = Phys.makeField(ROWS, PER_ROW, YV);
+const B = new Uint8Array(F.n);
+let path = null, ana = null, plotA = 0.5, dirty = true;
+let mw = 0, mh = 0, kx = 1, ky = 1, pw = 0, ph = 0, dpr = 1;
+
+function reseed(spin){
+  Phys.resetField(F);
+  if (spin) Phys.spinUp(F, state.mu, 2*YV/(1.5*3.5) + 1.4, 0.03);
+}
+function rebuildTracer(){
+  const x0s = state.side * state.x0;
+  path = Phys.tracePath(x0s, state.mu, YV, 4, 0.02);
+  ana = Phys.analyse(path);
+  plotA = Math.max(0.25, 1.3*ana.amp);
+  state.tt = 0;
+  updateReadouts();
+}
+
+function updateReadouts(){
+  const b = state.x0;
+  const km = v => { const k = v*KM; return ' <span class="km">(≈' + (k < 10 ? k.toFixed(1) : Math.round(k)) + ' km)</span>'; };
+  const u = ' r<sub>H</sub>';
+  const lt = Phys.lambdaTheory(b), at = Phys.linearAmp(state.mu, b);
+  $('rLamT').innerHTML = lt.toFixed(1) + u + km(lt);
+  $('rLamS').innerHTML = isFinite(ana.lambda) ? ana.lambda.toFixed(1) + u + km(ana.lambda) : 'n/a';
+  $('rAmpT').innerHTML = at.toFixed(2) + u + km(at);
+  $('rAmpS').innerHTML = ana.amp.toFixed(2) + u + km(ana.amp);
+}
+
+// ---------------------------------------------------------------- layout
+let lastW = 0;
+function layout(force){
+  const W = Math.max(280, Math.floor(cv.parentElement.clientWidth));
+  if (!force && W === lastW) return;
+  lastW = W;
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  mw = W; mh = Math.round(Math.min(480, Math.max(250, W*0.5)));
+  cv.width = Math.round(mw*dpr); cv.height = Math.round(mh*dpr); cv.style.height = mh + 'px';
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  kx = mw/(2*YV); ky = mh/(2*XV);
+  pw = mw; ph = Math.round(Math.min(230, Math.max(150, W*0.2)));
+  pv.width = Math.round(pw*dpr); pv.height = Math.round(ph*dpr); pv.style.height = ph + 'px';
+  px.setTransform(dpr, 0, 0, dpr, 0, 0);
+  $('stretch').textContent = (ky/kx).toFixed(1);
+  dirty = true;
+}
+
+// ---------------------------------------------------------------- drawing
+const sxOf = y => mw/2 - y*kx;     // along-orbit coordinate to screen x (prograde is to the left)
+const syOf = x => mh/2 - x*ky;     // radial coordinate to screen y (outward is up)
+
+function label(ctx, text, x, y, align, alpha){
+  ctx.textAlign = align || 'left'; ctx.globalAlpha = alpha == null ? 0.75 : alpha;
+  ctx.fillStyle = C.fg; ctx.fillText(text, x, y); ctx.globalAlpha = 1;
+}
+
+function drawSim(){
+  const ctx = cx, cxm = mw/2, cym = mh/2, wide = mw > 520;
+  ctx.fillStyle = C.sky; ctx.fillRect(0, 0, mw, mh);
+  ctx.font = '500 10.5px ' + C.mono; ctx.textBaseline = 'alphabetic';
+
+  // guides at 4 and 8 Hill radii, both sides
+  ctx.lineWidth = 1; ctx.strokeStyle = C.dim; ctx.setLineDash([2, 5]);
+  for (const g of [-8, -4, 4, 8]){ const yy = Math.round(syOf(g)) + 0.5; ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(mw, yy); ctx.stroke(); }
+  ctx.setLineDash([]);
+
+  // Hill sphere
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = C.fg; ctx.globalAlpha = 0.35;
+  ctx.beginPath(); ctx.ellipse(cxm, cym, 1*kx, 1*ky, 0, 0, Math.PI*2); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha = 1;
+
+  // streamlines
+  if (state.lines){
+    ctx.strokeStyle = C.fg; ctx.globalAlpha = 0.2; ctx.lineWidth = 1;
+    for (let r = 0; r < ROWS.length; r++){
+      ctx.beginPath(); let open = false; const base = r*PER_ROW;
+      for (let j = 0; j < PER_ROW; j++){
+        const i = base + j, sx = sxOf(F.Y[i]), sy = syOf(F.X[i]);
+        if (open && Math.abs(F.Y[i] - F.Y[i-1]) > 1.6) open = false;
+        if (!open){ ctx.moveTo(sx, sy); open = true; } else ctx.lineTo(sx, sy);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // particles, bucketed by radial displacement from their starting orbit
+  const dscale = 0.55*state.mass;
+  for (let i = 0; i < F.n; i++){
+    let t = (F.X[i] - F.X0[i]) / dscale; t = t < -1 ? -1 : t > 1 ? 1 : t;
+    B[i] = Math.round((t + 1)*0.5*(NB - 1));
+  }
+  for (let b = 0; b < NB; b++){
+    ctx.fillStyle = PAL[b];
+    for (let i = 0; i < F.n; i++) if (B[i] === b) ctx.fillRect(sxOf(F.Y[i]) - 1.1, syOf(F.X[i]) - 1.1, 2.2, 2.2);
+  }
+
+  // tracer trail and marker
+  const k = Math.min(path.n - 1, Math.floor(state.tt / path.h));
+  const k0 = Math.max(0, k - Math.round(2.6/path.h));
+  ctx.strokeStyle = C.trace; ctx.lineWidth = 1.6; ctx.globalAlpha = 0.85;
+  ctx.beginPath();
+  for (let q = k0; q <= k; q++){
+    const sx = sxOf(path.y[q]), sy = syOf(path.x0 + path.dx[q]);
+    if (q === k0) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
+  }
+  ctx.stroke(); ctx.globalAlpha = 1;
+  const tx = sxOf(path.y[k]), ty = syOf(path.x0 + path.dx[k]);
+  ctx.fillStyle = C.trace; ctx.beginPath(); ctx.arc(tx, ty, 3.4, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = C.trace; ctx.lineWidth = 1; ctx.globalAlpha = 0.6;
+  ctx.beginPath(); ctx.arc(tx, ty, 7, 0, Math.PI*2); ctx.stroke(); ctx.globalAlpha = 1;
+
+  // moon
+  ctx.fillStyle = C.moon; ctx.globalAlpha = 0.16; ctx.beginPath(); ctx.arc(cxm, cym, 11, 0, Math.PI*2); ctx.fill();
+  ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(cxm, cym, 4.6, 0, Math.PI*2); ctx.fill();
+  label(ctx, 'Daphnis', cxm, cym + 24, 'center', 0.9);
+
+  // guide labels with a backing so they stay legible over streamlines
+  const gl = [[4, '4 · ' + Math.round(4*KM) + ' km'], [8, '8 · ' + Math.round(8*KM) + ' km']];
+  for (const [g, txt] of gl){
+    const wtxt = ctx.measureText(txt).width + 8;
+    for (const sgn of [1, -1]){
+      const yy = syOf(sgn*g);
+      ctx.fillStyle = C.sky; ctx.globalAlpha = 0.85; ctx.fillRect(6, yy - 7, wtxt, 14); ctx.globalAlpha = 1;
+      label(ctx, txt, 10, yy + 3.5, 'left', 0.6);
+    }
+  }
+
+  // side labels and scale bar
+  label(ctx, wide ? 'OUTER SIDE · drifts behind →' : 'OUTER · behind →', mw - 10, 16, 'right', 0.85);
+  label(ctx, wide ? '← drifts ahead · INNER SIDE' : '← ahead · INNER', mw - 10, mh - 10, 'right', 0.85);
+  const bar = 10*kx, by = mh - 14;
+  ctx.strokeStyle = C.fg; ctx.globalAlpha = 0.8; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(10, by); ctx.lineTo(10 + bar, by); ctx.moveTo(10, by - 4); ctx.lineTo(10, by + 4); ctx.moveTo(10 + bar, by - 4); ctx.lineTo(10 + bar, by + 4); ctx.stroke();
+  ctx.globalAlpha = 1;
+  label(ctx, Math.round(10*KM) + ' km', 16 + bar, by + 3.5, 'left', 0.85);
+}
+
+function drawPlot(){
+  const ctx = px, W = pw, H = ph, mid = H/2, sc = (H/2 - 16)/plotA;
+  const sxp = y => W/2 - y*kx, syp = d => mid - d*sc;
+  ctx.fillStyle = C.sky; ctx.fillRect(0, 0, W, H);
+  ctx.font = '500 10.5px ' + C.mono; ctx.textBaseline = 'alphabetic';
+
+  // theory zero crossings downstream of the moon, at multiples of half a wavelength
+  const lam = Phys.lambdaTheory(state.x0), dir = path.dir;
+  ctx.strokeStyle = C.dim; ctx.lineWidth = 1; ctx.setLineDash([2, 4]);
+  for (let n = 1; n <= 8; n++){
+    const xs = Math.round(sxp(dir*n*lam/2)) + 0.5;
+    if (xs < 0 || xs > W) break;
+    ctx.beginPath(); ctx.moveTo(xs, 20); ctx.lineTo(xs, H - 6); ctx.stroke();
+    const whole = Math.floor(n/2), txt = n % 2 ? (whole ? whole + '½λ' : '½λ') : (whole === 1 ? 'λ' : whole + 'λ');
+    label(ctx, txt, xs + 4, H - 9, 'left', 0.6);
+  }
+  ctx.setLineDash([]);
+
+  // zero line and closest approach
+  ctx.strokeStyle = C.fg; ctx.globalAlpha = 0.3; ctx.beginPath(); ctx.moveTo(0, mid + 0.5); ctx.lineTo(W, mid + 0.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(Math.round(W/2) + 0.5, 6); ctx.lineTo(Math.round(W/2) + 0.5, H - 6); ctx.stroke(); ctx.globalAlpha = 1;
+  label(ctx, 'closest approach', W/2 + 6, 14, 'left', 0.6);
+
+  // path: faint for the whole pass, bright for the part already flown
+  const k = Math.min(path.n - 1, Math.floor(state.tt / path.h)), kw = path.kWin;
+  function trace(a, b){
+    ctx.beginPath();
+    for (let q = a; q <= b; q++){ const x = sxp(path.y[q]), y = syp(path.dx[q]); if (q === a) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  ctx.lineWidth = 1.5; ctx.strokeStyle = C.trace;
+  ctx.globalAlpha = 0.28; trace(0, kw);
+  ctx.globalAlpha = 1; ctx.lineWidth = 2; trace(0, Math.min(k, kw));
+  ctx.fillStyle = C.trace; ctx.beginPath(); ctx.arc(sxp(path.y[Math.min(k, kw)]), syp(path.dx[Math.min(k, kw)]), 4, 0, Math.PI*2); ctx.fill();
+
+  // axis labels
+  label(ctx, '+' + plotA.toFixed(2) + ' outward', 8, 14, 'left', 0.7);
+  label(ctx, '−' + plotA.toFixed(2) + ' inward', 8, H - 9, 'left', 0.7);
+  label(ctx, '0', 8, mid - 5, 'left', 0.5);
+}
+
+// ---------------------------------------------------------------- loop
+function advance(T){
+  const n = Math.max(1, Math.ceil(T/0.025)), h = T/n;
+  for (let i = 0; i < n; i++) Phys.stepField(F, h, state.mu);
+  state.tt += T;
+  if (state.tt > path.kWin*path.h + 1.2) state.tt = 0;
+}
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - last)/1000); last = now;
+  if (state.playing && !document.hidden){ advance(dt*BASE_RATE*state.speed); dirty = true; }
+  if (dirty){ dirty = false; drawSim(); drawPlot(); }
+  requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------- controls
+const fmtN = v => (+v).toFixed(2).replace(/\.?0+$/, '');
+function setPlaying(p){
+  state.playing = p; dirty = true;
+  const b = $('play'); b.textContent = p ? 'Pause' : 'Play'; b.setAttribute('aria-pressed', String(p));
+}
+$('play').addEventListener('click', () => setPlaying(!state.playing));
+$('restart').addEventListener('click', () => { reseed(false); state.tt = 0; setPlaying(true); });
+$('speed').addEventListener('input', e => { state.speed = +e.target.value; $('speedOut').textContent = fmtN(e.target.value) + '×'; });
+let massTimer = 0;
+$('mass').addEventListener('input', e => {
+  state.mass = +e.target.value; state.mu = MU0*state.mass;
+  $('massOut').textContent = fmtN(e.target.value) + '× Daphnis';
+  clearTimeout(massTimer);
+  massTimer = setTimeout(() => { reseed(true); rebuildTracer(); dirty = true; }, 120);
+});
+$('lines').addEventListener('change', e => { state.lines = e.target.checked; dirty = true; });
+function setSide(s){
+  state.side = s;
+  $('sideOut').setAttribute('aria-pressed', String(s === 1));
+  $('sideIn').setAttribute('aria-pressed', String(s === -1));
+  rebuildTracer(); dirty = true;
+}
+$('sideOut').addEventListener('click', () => setSide(1));
+$('sideIn').addEventListener('click', () => setSide(-1));
+$('x0').addEventListener('input', e => {
+  state.x0 = +e.target.value; $('x0Out').textContent = (+e.target.value).toFixed(1) + ' Hill radii';
+  rebuildTracer(); dirty = true;
+});
+
+if (window.ResizeObserver) new ResizeObserver(() => layout(false)).observe(cv.parentElement);
+window.addEventListener('resize', () => layout(false));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
+
+reseed(true);
+rebuildTracer();
+layout(true);
+setPlaying(state.playing);
+requestAnimationFrame(frame);
+})();
+</script>
+
+<style>html,body{overflow:hidden!important}</style><script>(function(){function fit(){try{var f=window.frameElement;if(!f)return;var h=Math.ceil(document.documentElement.scrollHeight);f.style.height=h+"px";f.style.minHeight=h+"px";f.setAttribute("height",h);var p=f.parentElement;for(var i=0;i<4&&p;i++){p.style.height="auto";p.style.minHeight="0";p.style.maxHeight="none";p.style.overflow="visible";p=p.parentElement;}}catch(e){}}window.addEventListener("load",fit);window.addEventListener("resize",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(document.body);setTimeout(fit,300);setTimeout(fit,1500);})();</script>
+</body></html></body>

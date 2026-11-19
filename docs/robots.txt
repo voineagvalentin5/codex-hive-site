@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://codex-hive.com/sitemap.xml
