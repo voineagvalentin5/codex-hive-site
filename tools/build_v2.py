@@ -275,7 +275,57 @@ for u in [l.strip() for l in open(SNAP+'/blogurls.txt') if '/blog/f/' in l]:
   art=f'<article class="post"><p><a href="/blog/">← All Posts</a></p><h1>{H.escape(t)}</h1><p class="date">{H.escape(ds)}</p>{bd}</article>'
   write(path,h+HEADER+f'<main>{art}</main>'+FOOT+'</body></html>')
   posts.append((path,t,ds,img.group(1) if img else None));manifest.append((path,title))
-# blog index (order = live sitemap order, newest first)
+# Posts published after the Nov 19 live snapshot, so a rebuild keeps them.
+# Approved by Valentin Nov 19: "Yes, publish both. Skyborne's early December alpha is still right."
+def head_new(path,title,description,og_image):
+  title_e=H.escape(title);desc_e=H.escape(description)
+  img=og_image if og_image.startswith('http') else LIVE+og_image
+  return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">{GA}'
+   f'<title>{title_e}</title><meta name="description" content="{desc_e}">'
+   f'<meta property="og:site_name" content="Codex Hive Labs"><meta property="og:title" content="{title_e}">'
+   f'<meta property="og:description" content="{desc_e}"><meta property="og:type" content="website">'
+   f'<meta property="og:image" content="{H.escape(img)}"><meta property="og:locale" content="en_US">'
+   f'<meta property="og:url" content="{LIVE}{path}">'
+   f'<link rel="canonical" href="{LIVE}{path}"><link rel="icon" href="/assets/logo-header.png"><link rel="stylesheet" href="/style.css?v=20261119"></head><body>'),title
+NEW_POSTS=[{
+  'slug':'a-new-home-for-codex-hive-and-a-first-look-at-hive-academy',
+  'title':'A new home for Codex Hive, and a first look at Hive Academy',
+  'date':'November 19, 2026',
+  'description':'Codex Hive has a new foundation. This week codex-hive.com moved to a faster, simpler home, and every Hive app now shares one navigation bar and one logo.',
+  'image':'/assets/codex-hive-logo-and-divisions.png',
+  'image_src':'tools/blog/codex-hive-logo-and-divisions.png',
+  'image_alt':'Official Codex Hive logo with the five division crests: Hive Buzz Records, Codex Hive Interactive, Codex Hive Research, Hive Academy, and Codex Hive Publishing',
+  'body':(
+    '<p><div><img src="/assets/codex-hive-logo-and-divisions.png" alt="Official Codex Hive logo with the five division crests: Hive Buzz Records, Codex Hive Interactive, Codex Hive Research, Hive Academy, and Codex Hive Publishing" loading="lazy"></div></p>'
+    '<p>Codex Hive has a new foundation. This week <a href="https://codex-hive.com/">codex-hive.com</a> moved to a faster, simpler home, and every Hive app now shares one navigation bar and one logo. You can move from Hive Buzz Newz to Hive Astra to Hive Scribe without feeling like you&#x27;ve left the Hive.</p>'
+    '<h2>Hive Academy: now in preview</h2>'
+    '<p>Our education division, Hive Academy, is open as an early preview at <a href="https://academy.codex-hive.com/">academy.codex-hive.com</a>. Its first featured experience is Hive Astra, an interactive solar system and live space science workbench. More lessons and tools will join it as they&#x27;re ready.</p>'
+    '<h2>What&#x27;s new in the apps</h2>'
+    '<ul>'
+    '<li>Hive Astra v3: a redesign with Live Signals and Missions. <a href="https://astra.codex-hive.com/">astra.codex-hive.com</a></li>'
+    '<li>Hive-Babble: a new download page. <a href="https://babble.codex-hive.com/">babble.codex-hive.com</a></li>'
+    '<li>Hive Scribe: a Bible study tool. Read a verse, explore its words, follow the connections. <a href="https://scribe.codex-hive.com/">scribe.codex-hive.com</a></li>'
+    '<li>Hive Buzz Newz: daily news from the Hive. <a href="https://newz.codex-hive.com/">newz.codex-hive.com</a></li>'
+    '</ul>'
+    '<h2>Music and podcasts</h2>'
+    '<p>Hive Buzz Records and ValenVox stay all about the music. Our podcasts are getting their own name: Hive Talks. From the Hive.</p>'
+    '<h2>Games</h2>'
+    '<p>Codex Hive Interactive is still building Skyborne, with an early alpha aimed at early December. Synapse, our VR mech game ("Two Minds. One Machine."), comes next.</p>'
+    '<p>Thanks for exploring with us.</p>'
+    '<p>Codex Hive Labs</p>'
+  ),
+}]
+new_recs=[]
+for np in NEW_POSTS:
+  src=os.path.join(ROOT,np['image_src']);dst=os.path.join(OUT,np['image'].lstrip('/'))
+  os.makedirs(os.path.dirname(dst),exist_ok=True)
+  if os.path.exists(src): shutil.copy(src,dst)
+  path=f"/blog/f/{np['slug']}/";h,title=head_new(path,np['title'],np['description'],np['image'])
+  art=f'<article class="post"><p><a href="/blog/">← All Posts</a></p><h1>{H.escape(np["title"])}</h1><p class="date">{H.escape(np["date"])}</p>{np["body"]}</article>'
+  write(path,h+HEADER+f'<main>{art}</main>'+FOOT+'</body></html>')
+  new_recs.append((path,np['title'],np['date'],np['image']));manifest.append((path,title))
+posts=new_recs+posts
+# blog index (order = new posts first, then live sitemap order)
 sp=BeautifulSoup(open(SNAP+'/html/blog.html').read(),'html.parser');h,title=head('/blog/',sp)
 cards=''.join(f'<a class="card" href="{p}">'+(f'<img src="{i}" alt="" loading="lazy">' if i else '')+f'<h3>{H.escape(t)}</h3><p class="date">{H.escape(d)}</p></a>' for p,t,d,i in posts)
 body=('<section><h1>The Codex Frontier</h1><div class="grid">'+cards+'</div></section>'
