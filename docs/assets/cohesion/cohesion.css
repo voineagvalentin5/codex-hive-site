@@ -391,7 +391,7 @@ a.post-card:hover .thumb img{transform:scale(1.03)}
 .page-hero .wm{width:min(62vw,860px);left:-6%;top:50%;transform:translateY(-50%)}
 @media (max-width:620px){
   .page-hero .wm{width:120vw;left:-35vw}
-  .card .wm{width:70%;right:-14%;bottom:-16%}
+  /* Same Buzz desktop placement on phone: the 70%/-14%/-16% shrink clipped crests off short home cards (only Buzz stayed visible). */
 }
 /* Grey note/tagline over a 12% gold crest (Buzz placement, no fade) must stay >= 4.5:1. */
 .light .has-wm .note{color:#4e535b!important}
