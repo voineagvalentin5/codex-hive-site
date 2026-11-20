@@ -378,17 +378,18 @@ a.post-card:hover .thumb img{transform:scale(1.03)}
 .brand picture{display:block;flex:none;line-height:0}
 
 /* ---------- division crest watermarks (decorative) ---------- */
-.wm{position:absolute;z-index:0;pointer-events:none;user-select:none;max-width:none;height:auto;opacity:.08}
+.wm{position:absolute;z-index:0;pointer-events:none;user-select:none;max-width:none;height:auto;opacity:.12}  /* Valentin: 12% */
 .has-wm{isolation:isolate}
 .card.has-wm{overflow:hidden}
 .card.has-wm>*:not(.wm){position:relative;z-index:1}
-.card .wm{width:115%;right:-38%;bottom:-22%;opacity:.10}
-.light .card .wm{opacity:.06}
+.card .wm{width:115%;right:-38%;bottom:-22%}
 .light .tagline{color:#5c6168}   /* AA on paper and over a watermark */
 .page-hero.has-wm>.shell{z-index:1}
-.page-hero .wm{width:min(62vw,860px);left:-6%;top:50%;transform:translateY(-50%);opacity:.07}
+.page-hero .wm{width:min(62vw,860px);left:-6%;top:50%;transform:translateY(-50%)}
 @media (max-width:620px){
-  .page-hero .wm{width:120vw;left:-35vw;opacity:.05}
-  .card .wm{width:70%;right:-14%;bottom:-16%;opacity:.07}
+  .page-hero .wm{width:120vw;left:-35vw}
+  .card .wm{width:70%;right:-14%;bottom:-16%}
 }
 @media (prefers-contrast:more){.wm{display:none}}
+
+.page-hero.has-wm .hero-meta{color:#9aa0a9}   /* AA 4.5:1 over the 12% watermark (was #7d848e: 4.0:1 at worst) */
