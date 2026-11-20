@@ -393,6 +393,18 @@ a.post-card:hover .thumb img{transform:scale(1.03)}
   .page-hero .wm{width:120vw;left:-35vw}
   .card .wm{width:70%;right:-14%;bottom:-16%}
 }
+/* ERO gold crest is denser than the Buzz watermark. Keep the 12% opacity; fade it toward the
+   text so the grey note/tagline on the light Apps cards stay >= 4.5:1. */
+.wm-ero{opacity:.12}
+.card .wm-ero{
+  width:90%;right:-32%;bottom:-28%;
+  -webkit-mask-image:linear-gradient(to top left,#000 0%,#000 8%,transparent 36%);
+  mask-image:linear-gradient(to top left,#000 0%,#000 8%,transparent 36%);
+}
+@media (max-width:620px){
+  .card .wm-ero{width:64%;right:-16%;bottom:-24%}
+}
+
 @media (prefers-contrast:more){.wm{display:none}}
 
 .page-hero.has-wm .hero-meta{color:#9aa0a9}   /* AA 4.5:1 over the 12% watermark (was #7d848e: 4.0:1 at worst) */
