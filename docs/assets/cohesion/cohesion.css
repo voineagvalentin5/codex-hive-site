@@ -347,3 +347,31 @@ a.post-card:hover .thumb img{transform:scale(1.03)}
 .artist-head{min-width:0}
 .artist-wm{flex:1 1 0;min-width:0;width:100%;max-width:260px}
 .big-link.email{text-transform:none;letter-spacing:-.01em;font-size:clamp(1.15rem,2vw,1.8rem)}
+
+/* ---------- icon scale pass (icons sized to the text they represent) ---------- */
+.brand img{width:auto;height:34px}            /* = CODEX HIVE + LABS block height (33px) */
+.brand-word small{display:block}
+.page-hero .shell{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.hero-emblem{justify-self:end;display:flex;align-items:center;justify-content:center;width:clamp(260px,23.5vw,340px)}
+.page-hero .hero-emblem .crest{width:100%;height:auto;justify-self:auto}
+.hero-emblem.wide{width:min(420px,100%)}
+.crest-img{width:128px;height:128px}
+.card-head{display:flex;align-items:center;gap:1rem}
+.card-head>div{display:flex;flex-direction:column;gap:.45rem;min-width:0}
+.card-head .app-icon{flex:none;padding:3px}
+.card-head .app-icon{width:66px;height:66px}
+.card-head.sm .newz-tile{font-size:.78rem;letter-spacing:.08em}
+.card-head.md .newz-tile{font-size:.92rem;letter-spacing:.1em}
+.featured-app{grid-template-columns:auto minmax(0,1fr)}
+.feature-icon{width:clamp(220px,22vw,300px);justify-self:center}
+.feature-icon img{width:100%;height:auto;aspect-ratio:1;border-radius:18%;filter:drop-shadow(0 20px 50px rgba(242,169,0,.16))}
+@media (max-width:1100px){
+  .page-hero .shell{grid-template-columns:1fr}
+  .hero-emblem{order:-1;justify-self:start;width:clamp(150px,40vw,200px);margin-bottom:-.5rem}
+  .featured-app{grid-template-columns:1fr}
+  .feature-icon{justify-self:start;width:clamp(150px,40vw,220px)}
+}
+@media (max-width:620px){
+  .crest-img{width:112px;height:112px}
+  .card-head .app-icon{width:52px;height:52px}
+}
