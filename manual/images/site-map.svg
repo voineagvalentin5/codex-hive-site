@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" font-family="Arial, Helvetica, sans-serif">
+<rect width="1000" height="640" fill="#ffffff"/>
+<style>.b{fill:#fff7e0;stroke:#b07a00;stroke-width:2}.g{fill:#eef3ff;stroke:#2f4d8a;stroke-width:2}.d{fill:#eefaf0;stroke:#2b7a3d;stroke-width:2}.p{fill:#f4f4f4;stroke:#555;stroke-width:2}.t{font-size:15px;fill:#111}.s{font-size:12px;fill:#333}.h{font-size:17px;font-weight:bold;fill:#111}.a{stroke:#444;stroke-width:2;fill:none;marker-end:url(#m)}</style>
+<defs><marker id="m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker></defs>
+<text x="500" y="32" text-anchor="middle" class="h">How your websites get online</text>
+<!-- column 1 laptop -->
+<rect x="20" y="70" width="210" height="150" rx="10" class="p"/>
+<text x="125" y="98" text-anchor="middle" class="h">1. Your laptop</text>
+<text x="125" y="122" text-anchor="middle" class="s">LAPTOP-G96VQ5Q2</text>
+<text x="125" y="146" text-anchor="middle" class="s">Edit files in VS Code</text>
+<text x="125" y="168" text-anchor="middle" class="s">Commit + Push in</text>
+<text x="125" y="186" text-anchor="middle" class="s">GitHub Desktop</text>
+<!-- github -->
+<rect x="290" y="70" width="230" height="150" rx="10" class="g"/>
+<text x="405" y="98" text-anchor="middle" class="h">2. GitHub</text>
+<text x="405" y="122" text-anchor="middle" class="s">account voineagvalentin5</text>
+<text x="405" y="146" text-anchor="middle" class="s">One "repo" (folder in the</text>
+<text x="405" y="164" text-anchor="middle" class="s">cloud) per website.</text>
+<text x="405" y="188" text-anchor="middle" class="s">GitHub Pages turns each</text>
+<text x="405" y="206" text-anchor="middle" class="s">repo into a live website.</text>
+<!-- godaddy -->
+<rect x="580" y="70" width="400" height="150" rx="10" class="b"/>
+<text x="780" y="98" text-anchor="middle" class="h">3. GoDaddy (domain name + DNS)</text>
+<text x="780" y="124" text-anchor="middle" class="s">codex-hive.com is registered here (paid to Jul 18, 2028).</text>
+<text x="780" y="146" text-anchor="middle" class="s">DNS = the phone book of the internet.</text>
+<text x="780" y="168" text-anchor="middle" class="s">It tells browsers: "codex-hive.com and each</text>
+<text x="780" y="186" text-anchor="middle" class="s">subdomain live at GitHub". Email (Microsoft 365)</text>
+<text x="780" y="204" text-anchor="middle" class="s">records also live here. Do not touch them.</text>
+<path d="M230,145 L285,145" class="a"/>
+<path d="M520,145 L575,145" class="a"/>
+<!-- sites -->
+<text x="500" y="262" text-anchor="middle" class="h">4. Visitors see these addresses</text>
+<g>
+<rect x="20" y="280" width="230" height="70" rx="8" class="d"/><text x="135" y="306" text-anchor="middle" class="t">codex-hive.com</text><text x="135" y="328" text-anchor="middle" class="s">repo codex-hive-site (docs/)</text>
+<rect x="265" y="280" width="230" height="70" rx="8" class="d"/><text x="380" y="306" text-anchor="middle" class="t">academy.codex-hive.com</text><text x="380" y="328" text-anchor="middle" class="s">repo hive-academy</text>
+<rect x="510" y="280" width="230" height="70" rx="8" class="d"/><text x="625" y="306" text-anchor="middle" class="t">astra.codex-hive.com</text><text x="625" y="328" text-anchor="middle" class="s">repo hive-astra</text>
+<rect x="755" y="280" width="225" height="70" rx="8" class="d"/><text x="867" y="306" text-anchor="middle" class="t">scribe.codex-hive.com</text><text x="867" y="328" text-anchor="middle" class="s">repo hive-scribe</text>
+<rect x="20" y="365" width="230" height="70" rx="8" class="d"/><text x="135" y="391" text-anchor="middle" class="t">newz.codex-hive.com</text><text x="135" y="413" text-anchor="middle" class="s">repo hive-buzz-newz</text>
+<rect x="265" y="365" width="230" height="70" rx="8" class="d"/><text x="380" y="391" text-anchor="middle" class="t">babble.codex-hive.com</text><text x="380" y="413" text-anchor="middle" class="s">repo hive-babble (gh-pages)</text>
+<rect x="510" y="365" width="230" height="70" rx="8" class="d"/><text x="625" y="391" text-anchor="middle" class="t">ero.codex-hive.com</text><text x="625" y="413" text-anchor="middle" class="s">repo earth-resonance-observatory</text>
+<rect x="755" y="365" width="225" height="70" rx="8" class="p"/><text x="867" y="391" text-anchor="middle" class="t">www.codex-hive.com</text><text x="867" y="413" text-anchor="middle" class="s">goes to codex-hive.com</text>
+</g>
+<rect x="20" y="460" width="960" height="160" rx="10" class="p"/>
+<text x="40" y="488" class="h">Inside Hive Academy (academy.codex-hive.com/modules/...)</text>
+<text x="40" y="514" class="t">Rosetta Logos = modules/rosetta-logos/     Hive Kids Bible = modules/scripture-memory/     Hive Phonics = modules/phonics/</text>
+<text x="40" y="548" class="h">Extra copies and other places</text>
+<text x="40" y="574" class="t">Hugging Face (Codex-Hive-Labs): hive-buzz-newz backup copy, daphnis-wake.    Patreon: patreon.com/c/Codex_Hive_Labs</text>
+<text x="40" y="600" class="t">Google Analytics G-DW4D6JPPB4 counts visits on adult pages. Kids' pages (Phonics, Kids Bible) have NO tracking.</text>
+</svg>
