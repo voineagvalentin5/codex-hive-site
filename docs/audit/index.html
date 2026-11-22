@@ -32,6 +32,7 @@
 .audit-form .hint{display:block;margin:.4rem 0 0;color:#545961;font-size:.85rem;line-height:1.5}
 .audit-form input[type=text],
 .audit-form input[type=email],
+.audit-form input[type=url],
 .audit-form textarea{
   width:100%;
   min-height:46px;
@@ -45,6 +46,7 @@
 .audit-form textarea{min-height:7.5rem;resize:vertical}
 .audit-form input[type=text]:focus-visible,
 .audit-form input[type=email]:focus-visible,
+.audit-form input[type=url]:focus-visible,
 .audit-form textarea:focus-visible{outline:2px solid var(--amber-deep);outline-offset:2px}
 .audit-opts{display:grid;gap:.45rem}
 .audit-opts .opt{
@@ -141,8 +143,9 @@
         <span class="hint" id="audit-email-hint">Required. We'll use it only to reply about this audit.</span>
       </div>
       <div class="field">
-        <label class="field-label" for="audit-url">Website <span style="text-transform:none;letter-spacing:0;font-weight:600;color:#6f747c">(optional)</span></label>
-        <input type="text" id="audit-url" name="website" autocomplete="url" inputmode="url" maxlength="300" placeholder="https://">
+        <label class="field-label" for="audit-url">Website <abbr class="req" title="required">*</abbr></label>
+        <input type="url" id="audit-url" name="website" autocomplete="url" inputmode="url" required maxlength="300" placeholder="https://" aria-describedby="audit-url-hint audit-status">
+        <span class="hint" id="audit-url-hint">Required. You can enter mybusiness.com or a full https:// address.</span>
       </div>
       <fieldset>
         <legend class="field-label">What would you like to know?</legend>
@@ -221,10 +224,33 @@
   var again = document.getElementById("audit-mailto-again");
   var TO = "VoineagValentin@codex-hive.com";
   var SUBJECT = "Website audit request";
+  var urlField = document.getElementById("audit-url");
 
   function setStatus(kind, text){
     statusEl.dataset.kind = kind || "";
     statusEl.textContent = text || "";
+  }
+
+  function normalizeWebsite(raw){
+    var v = (raw || "").trim();
+    if (!v) return "";
+    if (/^[a-z][a-z0-9+.-]*:/i.test(v)) return v;
+    if (v.indexOf("//") === 0) return "https:" + v;
+    return "https://" + v;
+  }
+
+  function isValidHttpUrl(value){
+    try {
+      var u = new URL(value);
+      if (u.protocol !== "http:" && u.protocol !== "https:") return false;
+      var host = u.hostname;
+      if (!host) return false;
+      if (host === "localhost") return true;
+      if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host)) return true;
+      return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i.test(host);
+    } catch (err) {
+      return false;
+    }
   }
 
   function syncOther(){
@@ -247,6 +273,14 @@
     e.preventDefault();
     setStatus("", "");
     otherText.setCustomValidity("");
+    urlField.setCustomValidity("");
+    var website = normalizeWebsite(urlField.value);
+    if (website) urlField.value = website;
+    if (!urlField.value.trim()){
+      urlField.setCustomValidity("Please enter the website you'd like audited.");
+    } else if (!isValidHttpUrl(urlField.value.trim())){
+      urlField.setCustomValidity("Please enter a website address, like mybusiness.com.");
+    }
     if (otherBox.checked && !otherText.value.trim()){
       otherText.setCustomValidity("Please describe what you'd like to know.");
     }
@@ -255,6 +289,9 @@
       if (!email.checkValidity()){
         setStatus("error", "Please enter a valid email so we can reply.");
         email.focus();
+      } else if (!urlField.checkValidity()){
+        setStatus("error", urlField.validationMessage || "Please enter the website you'd like audited.");
+        urlField.focus();
       } else if (otherBox.checked && !otherText.checkValidity()){
         setStatus("error", "Please describe what you'd like to know in Other.");
         otherText.focus();
@@ -264,7 +301,7 @@
 
     var name = document.getElementById("audit-name").value.trim();
     var email = document.getElementById("audit-email").value.trim();
-    var website = document.getElementById("audit-url").value.trim();
+    website = urlField.value.trim();
     var message = document.getElementById("audit-message").value.trim();
     var topics = Array.prototype.map.call(
       form.querySelectorAll('input[name="topics"]:checked'),
@@ -275,7 +312,7 @@
     var lines = ["Website audit request", ""];
     lines.push("Name: " + (name || "(not provided)"));
     lines.push("Email: " + email);
-    lines.push("Website: " + (website || "(not provided)"));
+    lines.push("Website: " + website);
     lines.push("");
     lines.push("What they want to know:");
     if (!topics.length && !other){
