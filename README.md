@@ -13,6 +13,12 @@ Open `http://127.0.0.1:8845/`. The main site is static and needs no build step.
 The existing GitHub Pages publish root is `docs/`. Its custom domain record is
 in `docs/CNAME`.
 
+The Astra and ERO preview folders keep a `CNAME.preview` file only as a reminder
+of their public hostnames. Those files are not named `CNAME`, so GitHub Pages
+cannot pick them up and cannot hijack `astra.codex-hive.com` or
+`ero.codex-hive.com` if the Pages source is ever pointed at the wrong folder.
+Do not rename them back to `CNAME` in this repository.
+
 `docs/assets/hub/hub.css` holds the redesigned site styling. Run
 `py -3 tools/hub_chrome.py` after changing the shared navigation in that script
 to apply it to all pages with the common header. Redirect stubs and embedded

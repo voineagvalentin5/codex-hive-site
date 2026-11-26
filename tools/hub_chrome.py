@@ -16,7 +16,7 @@ LINKS = [
     ("Services", "/audit/", {"audit"}),
 ]
 NAV = re.compile(r'(<nav class="site-nav" id="site-nav" aria-label="Main">).*?(</nav>)', re.S)
-STYLE = '<link rel="stylesheet" href="/assets/hub/hub.css?v=1">'
+STYLE = '<link rel="stylesheet" href="/assets/hub/hub.css?v=2">'
 
 
 def apply(path: Path) -> bool:

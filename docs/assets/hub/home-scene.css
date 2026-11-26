@@ -221,7 +221,8 @@
       view-timeline-inset: var(--header-h) 0px;
     }
 
-    .hub-home { padding-bottom: clamp(100px, 18svh, 180px); }
+    /* Keep the first screen full height, but don't add a second dark band of padding. */
+    .hub-home { padding-bottom: 0; }
     .hub-home .shell { height: var(--flight-height); min-height: 0; }
 
     .hub-flight-stage {
@@ -276,8 +277,8 @@
     }
 
     .hub-divisions {
-      min-height: clamp(530px, 68svh, 670px);
-      padding-block: 36px 42px;
+      min-height: 0;
+      padding-block: 28px 36px;
       border: 0;
       background: linear-gradient(0deg, #090d15 0%, #090d15ec 16%, #090d1585 56%, transparent 100%);
     }
@@ -306,48 +307,48 @@
 
     @keyframes flight-earth {
       0% { transform: translate(calc(-50% + min(24vw, 375px)), -50%) scale(1) rotate(0deg); }
-      34% {
+      22% {
         transform: translate(calc(-50% + 12vw), calc(-50% + var(--flight-height) * .18)) scale(1.57) rotate(-8deg);
         animation-timing-function: cubic-bezier(.32, .02, .32, 1);
       }
-      83%, 100% {
+      55%, 100% {
         transform: translate(-50%, calc(-50% + var(--flight-height) * .075 + var(--flight-earth) * 1.20)) scale(2.86) rotate(-16deg);
       }
     }
 
     @keyframes flight-atmosphere {
-      0%, 14% { opacity: 0; }
-      78%, 100% { opacity: .64; }
+      0%, 10% { opacity: 0; }
+      50%, 100% { opacity: .64; }
     }
 
     @keyframes flight-depart {
-      0%, 8% { opacity: 1; }
-      38%, 100% { opacity: 0; }
+      0%, 6% { opacity: 1; }
+      24%, 100% { opacity: 0; }
     }
 
     @keyframes flight-copy {
-      0%, 12% { opacity: 1; pointer-events: auto; }
-      42% { opacity: 0; pointer-events: auto; }
-      43%, 100% { opacity: 0; pointer-events: none; }
+      0%, 8% { opacity: 1; pointer-events: auto; }
+      28% { opacity: 0; pointer-events: auto; }
+      30%, 100% { opacity: 0; pointer-events: none; }
     }
 
     @keyframes flight-jumps {
-      0%, 38% { opacity: 1; pointer-events: auto; }
-      58% { opacity: 0; pointer-events: auto; }
-      59%, 100% { opacity: 0; pointer-events: none; }
+      0%, 10% { opacity: 1; pointer-events: auto; }
+      28% { opacity: 0; pointer-events: auto; }
+      30%, 100% { opacity: 0; pointer-events: none; }
     }
 
     @keyframes flight-distant-stars { to { transform: translate(-18px, 24px) scale(1.07); } }
     @keyframes flight-near-stars { to { transform: translate(-52px, 57px) scale(1.18); } }
 
     @keyframes flight-arrival {
-      0%, 40% { opacity: 0; transform: translateY(15px); }
-      68%, 100% { opacity: 1; transform: translateY(0); }
+      0%, 10% { opacity: 0; transform: translateY(15px); }
+      28%, 100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes flight-divisions {
-      0%, 48% { opacity: 0; transform: translateY(25px); }
-      83%, 100% { opacity: 1; transform: translateY(0); }
+      0%, 14% { opacity: 0; transform: translateY(25px); }
+      36%, 100% { opacity: 1; transform: translateY(0); }
     }
   }
 }

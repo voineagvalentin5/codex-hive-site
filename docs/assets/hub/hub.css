@@ -151,7 +151,8 @@
   .hub-label { font-size: 10px; margin-bottom: 11px; }
   .hub-intro h1 { font-size: clamp(43px, 11vw, 64px); }
   .hub-intro > p:not(.hub-label) { margin: 15px 0 17px; font-size: 15px; }
-  .hub-actions .btn { flex: 0 0 auto; width: auto; padding: .65rem .85rem; }
+  .hub-actions { width: 100%; }
+  .hub-actions .btn { flex: 1 0 100%; width: 100%; justify-content: center; box-sizing: border-box; padding: .65rem .85rem; }
   .hub-planet { position: relative; inset: auto; width: min(100%, 400px); margin: -5px auto 0; transform: none; }
   .hub-planet figcaption { right: 2%; bottom: 8%; }
   .hub-heading { align-items: start; flex-direction: column; gap: 9px; }
