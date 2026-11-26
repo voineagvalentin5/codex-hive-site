@@ -1,0 +1,35 @@
+const astraData = {
+  planets: [
+    { id: 'sun', name: 'The Sun', kind: 'OUR STAR', color: '#ffb96c', diameter: '1.39M km', distance: '0 AU', text: 'The Sun contains most of the solar system’s mass. Its magnetic activity can launch material and disturbances into the solar wind.' },
+    { id: 'mercury', name: 'Mercury', kind: 'ROCKY PLANET', color: '#afa29a', diameter: '4,879 km', distance: '0.39 AU', text: 'Mercury is a cratered world with an 88-Earth-day orbit. With very little atmosphere, its surface can swing between extreme temperatures.' },
+    { id: 'venus', name: 'Venus', kind: 'ROCKY PLANET', color: '#e9bd86', diameter: '12,104 km', distance: '0.72 AU', text: 'Thick, bright clouds conceal Venus’s surface. Its dense carbon dioxide atmosphere traps enough heat to make it the hottest planet.' },
+    { id: 'earth', name: 'Earth', kind: 'ROCKY PLANET', color: '#7bbdff', diameter: '12,742 km', distance: '1.00 AU', text: 'Earth’s oceans and atmosphere make it easy to spot from space. Its magnetic field interacts with the solar wind, helping shape the auroras around the poles.' },
+    { id: 'moon', name: 'The Moon', kind: 'NATURAL SATELLITE', color: '#d3d1c6', diameter: '3,475 km', distance: '384,400 km from Earth', text: 'Sunlight illuminates half of the Moon at a time. Its phases reflect how much of that lit half we can see from Earth.' },
+    { id: 'mars', name: 'Mars', kind: 'ROCKY PLANET', color: '#e2845b', diameter: '6,779 km', distance: '1.52 AU', text: 'Mars is an iron-rich desert with ancient river valleys and polar ice. Robotic missions study what its landscape reveals about its past.' },
+    { id: 'jupiter', name: 'Jupiter', kind: 'GAS GIANT', color: '#e2bb9b', diameter: '139,820 km', distance: '5.20 AU', text: 'The largest planet has fast-moving cloud bands and storms. Its moons include Europa, whose icy crust likely covers a salty ocean.' },
+    { id: 'saturn', name: 'Saturn', kind: 'GAS GIANT', color: '#f1da9a', diameter: '116,460 km', distance: '9.58 AU', text: 'Saturn’s bright rings consist mostly of ice particles. Gaps and waves in the rings reveal gravitational interactions with its moons.' },
+    { id: 'uranus', name: 'Uranus', kind: 'ICE GIANT', color: '#8fdfdf', diameter: '50,724 km', distance: '19.2 AU', text: 'Uranus rotates on its side compared with most planets. It has faint rings and an atmosphere with methane that gives it a blue-green color.' },
+    { id: 'neptune', name: 'Neptune', kind: 'ICE GIANT', color: '#6385e7', diameter: '49,244 km', distance: '30.1 AU', text: 'Neptune orbits the Sun roughly once every 165 Earth years. Even so far from sunlight, its atmosphere drives powerful winds and storms.' },
+  ],
+  replay: [
+    { id: 'eruption', label: 'Eruption', phase: 'sun', kind: 'ARCHIVED EVENT REPORT', title: 'The Sun erupts.', text: 'A large active region produced a series of solar flares and coronal mass ejections starting May 8. A flare is a burst of radiation. A coronal mass ejection carries magnetized plasma out from the Sun.', metricLabel: 'SOLAR ACTIVE REGION', metric: '13664', date: '8 May 2024', source: 'https://ccmc.gsfc.nasa.gov/storms/may2024/' },
+    { id: 'transit', label: 'Arrival', phase: 'transit', kind: 'EVENT ANALYSIS', title: 'The disturbance reaches us.', text: 'NASA’s event analysis places an arrival near Earth on May 10 at about 13:03 UTC. Several eruptions were involved, and the report identifies other possible arrivals during the storm.', metricLabel: 'REPORTED ARRIVAL', metric: '≈13:03 UTC', date: '10 May 2024', source: 'https://kauai.ccmc.gsfc.nasa.gov/DONKI/view/Alert/30944/1' },
+    { id: 'storm', label: 'Storm', phase: 'earth', kind: 'ARCHIVED GEOMAGNETIC ACTIVITY', title: 'Earth’s field responds.', text: 'Geomagnetic activity reached the extreme end of NOAA’s scale. Kp summarizes magnetic disturbances measured across a network of ground stations.', metricLabel: 'PEAK STORM CLASS', metric: 'G5 · Extreme', date: '10–11 May 2024', source: 'https://www.ngdc.noaa.gov/stp/space-weather/swpc-products/weekly_reports/PRFs_of_SGD/2024/05/prf2541.pdf' },
+    { id: 'aurora', label: 'Aurora', phase: 'aurora', kind: 'HISTORICAL CONTEXT', title: 'The night lights up.', text: 'Aurora was reported much farther from the poles than usual. The glow in this scene illustrates the phenomenon. Visibility on the ground varies with location, darkness and weather.', metricLabel: 'PHENOMENON', metric: 'Aurora', date: '10–11 May 2024', source: 'https://ccmc.gsfc.nasa.gov/storms/may2024/' },
+  ],
+  cities: [
+    { id: 'detroit', name: 'Detroit, USA', lat: 42.331, lon: -83.046, zone: 'America/Detroit' },
+    { id: 'anchorage', name: 'Anchorage, USA', lat: 61.218, lon: -149.900, zone: 'America/Anchorage' },
+    { id: 'new-york', name: 'New York, USA', lat: 40.713, lon: -74.006, zone: 'America/New_York' },
+    { id: 'reykjavik', name: 'Reykjavík, Iceland', lat: 64.147, lon: -21.943, zone: 'Atlantic/Reykjavik' },
+    { id: 'london', name: 'London, UK', lat: 51.507, lon: -0.128, zone: 'Europe/London' },
+    { id: 'quito', name: 'Quito, Ecuador', lat: -0.181, lon: -78.468, zone: 'America/Guayaquil' },
+    { id: 'sydney', name: 'Sydney, Australia', lat: -33.869, lon: 151.209, zone: 'Australia/Sydney' },
+  ],
+  missions: [
+    { name: 'Artemis II', type: 'CREWED LUNAR FLYBY', image: 'artemis2', credit: 'NASA / Bill Ingalls', text: 'Four astronauts traveled around the Moon aboard Orion and returned to Earth.', source: 'https://www.nasa.gov/mission/artemis-ii/' },
+    { name: 'Parker Solar Probe', type: 'SOLAR ORBITER', image: 'parker', credit: 'NASA / Johns Hopkins APL', text: 'A probe that flies through the solar corona to study the origins of the solar wind.', source: 'https://science.nasa.gov/mission/parker-solar-probe/' },
+    { name: 'Europa Clipper', type: 'JUPITER MISSION', image: 'clipper', credit: 'NASA / JPL-Caltech · Artist’s concept', text: 'Repeated flybys will examine Europa’s ice, ocean and conditions for habitability.', source: 'https://science.nasa.gov/mission/europa-clipper/' },
+    { name: 'Perseverance', type: 'MARS ROVER', image: 'perseverance', credit: 'NASA / JPL-Caltech', text: 'Explores Jezero Crater and collects samples to help study ancient environments on Mars.', source: 'https://science.nasa.gov/mission/mars-2020-perseverance/' },
+  ],
+};

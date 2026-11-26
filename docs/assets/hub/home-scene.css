@@ -1,0 +1,426 @@
+.hub-flight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  isolation: isolate;
+  color: #f4f4ed;
+  background: #0a0e16;
+}
+
+.hub-home {
+  grid-area: 1 / 1;
+  z-index: 1;
+  background: none;
+  pointer-events: none;
+}
+
+.hub-home .hub-intro,
+.hub-home .hub-hero-jumps { pointer-events: auto; }
+
+.hub-flight-stage {
+  grid-area: 1 / 1;
+  position: relative;
+  overflow: clip;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 77% 45%, #1b3047 0%, #101a29 27%, transparent 58%),
+    linear-gradient(155deg, #0b0f17, #0a0d10 72%);
+}
+
+.hub-flight-stage .shell { position: relative; height: 100%; }
+
+.hub-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mask-image: linear-gradient(174deg, #000 50%, transparent 97%);
+}
+
+.hub-stars {
+  position: absolute;
+  inset: -200px 0 0;
+}
+
+.hub-stars-distant {
+  background-image:
+    radial-gradient(1px 1px at 8% 27%, #bbc9e0 45%, transparent),
+    radial-gradient(1px 1px at 51% 12%, #a8bcda 45%, transparent),
+    radial-gradient(1px 1px at 38% 46%, #7589a8 35%, transparent),
+    radial-gradient(1px 1px at 69% 71%, #a9bed8 45%, transparent),
+    radial-gradient(1px 1px at 23% 84%, #b4c7e6 35%, transparent),
+    radial-gradient(1px 1px at 91% 53%, #6e85a7 45%, transparent),
+    radial-gradient(1px 1px at 88% 95%, #afc0dc 35%, transparent);
+  background-size: 223px 183px, 251px 207px, 281px 185px, 317px 173px, 257px 241px, 239px 192px, 293px 229px;
+  opacity: .62;
+}
+
+.hub-stars-near {
+  background-image:
+    radial-gradient(1.5px 1.5px at 13% 24%, #d1dff5 32%, transparent),
+    radial-gradient(2px 2px at 85% 54%, #e0e9fa 32%, transparent),
+    radial-gradient(1.5px 1.5px at 46% 79%, #f2c482 32%, transparent),
+    radial-gradient(1.25px 1.25px at 68% 39%, #9caef2 39%, transparent);
+  background-size: 401px 283px, 569px 341px, 461px 337px, 479px 313px;
+  background-position: 44px 70px, 52px -14px, -65px 89px, -27px 33px;
+  mask-image: linear-gradient(90deg, #0003, #000 72%);
+  opacity: .78;
+}
+
+.hub-flight-stage .hub-planet {
+  z-index: 1;
+  width: clamp(490px, 48vw, 730px);
+  right: -2%;
+}
+
+.hub-globe {
+  display: block;
+  position: relative;
+}
+
+.hub-orbits {
+  position: absolute;
+  inset: 3%;
+  border: 1px solid #b3c9e02b;
+  border-radius: 50%;
+}
+
+.hub-orbits::before,
+.hub-orbits::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hub-orbits::before {
+  inset: 5%;
+  border: 1px dashed #b3c9e024;
+}
+
+.hub-orbits::after {
+  width: 6px;
+  height: 6px;
+  top: 14.6%;
+  right: 14.6%;
+  translate: 50% -50%;
+  background: var(--hub-gold);
+  box-shadow: 0 0 12px #f9c9788a;
+}
+
+.hub-flight-stage .hub-planet figcaption {
+  right: 5%;
+  bottom: 6%;
+  padding: 8px 11px;
+  border: 0;
+  border-left: 1px solid var(--hub-gold);
+  border-radius: 0 4px 4px 0;
+  background: #0d1520ed;
+}
+
+.hub-hero-jumps {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 22px;
+}
+
+.hub-hero-jumps a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  color: #d1d9e4;
+  font: 600 11px/1.4 var(--hub-mono);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.hub-hero-jumps a span { color: var(--hub-gold); font-size: 16px; }
+.hub-hero-jumps a:hover { color: var(--hub-gold); }
+
+.hub-divisions {
+  grid-area: 2 / 1;
+  position: relative;
+  padding: clamp(42px, 5vw, 80px) 0;
+  border-top: 1px solid #a2c2e42b;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 40%, #203047, #0a0e16 74%);
+}
+
+.hub-divisions > .shell { position: relative; }
+.hub-divisions-head .hub-label { justify-content: center; margin-bottom: 12px; }
+
+.hub-divisions h2 {
+  margin: 0;
+  font: 730 clamp(38px, 5.15vw, 76px)/.98 var(--body);
+  letter-spacing: -.072em;
+  color: #f6f4eb;
+}
+
+.hub-divisions h2 em { font-style: normal; color: var(--hub-gold); }
+.hub-divisions-head > p:last-child { margin: 12px auto 0; max-width: 36em; color: #c3cfdb; }
+
+.hub-division-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 1060px;
+  margin: 32px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hub-division-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 14px 10px;
+  border-radius: 8px;
+  color: #ffdfa3;
+  font: 670 clamp(11px, 1.38vw, 16px)/1.2 var(--hub-mono);
+  text-transform: uppercase;
+  letter-spacing: .035em;
+}
+
+.hub-division-choice img {
+  display: block;
+  width: clamp(78px, 11vw, 140px);
+  height: auto;
+  filter: drop-shadow(0 8px 14px #06070cbc);
+}
+
+.hub-division-choice:hover,
+.hub-division-choice:focus-visible { color: #fff2d9; }
+.hub-division-choice:focus-visible { outline: 2px solid var(--hub-gold); outline-offset: 4px; }
+.hub-division-choice:hover img,
+.hub-division-choice:focus-visible img { filter: drop-shadow(0 0 18px #ffc16e85); }
+.hub-division-choice small { color: #b8c3d0; font-size: 9px; letter-spacing: .07em; }
+
+.hub-division-detail {
+  margin: 6px 0 0;
+  color: #c3cfdb;
+  font-size: .83rem;
+  line-height: 1.45;
+}
+
+.hub-division-detail strong { display: block; margin-bottom: 3px; color: #f6f4eb; }
+
+/* Only the art stays in view. The copy and all navigation keep their place in the document. */
+@supports (view-timeline-name: --flight) and (animation-timeline: --flight) and (animation-range: contain) {
+  @media (min-width: 900px) and (min-height: 620px) and (prefers-reduced-motion: no-preference) {
+    .hub-flight {
+      --flight-height: calc(100svh - var(--header-h));
+      --flight-earth: clamp(480px, 48vw, 840px);
+      view-timeline: --flight block;
+      view-timeline-inset: var(--header-h) 0px;
+    }
+
+    .hub-home { padding-bottom: clamp(100px, 18svh, 180px); }
+    .hub-home .shell { height: var(--flight-height); min-height: 0; }
+
+    .hub-flight-stage {
+      grid-area: 1 / 1 / 3 / 2;
+      position: sticky;
+      top: var(--header-h);
+      align-self: start;
+      height: var(--flight-height);
+    }
+
+    .hub-flight-stage .hub-planet {
+      left: 50%;
+      right: auto;
+      width: var(--flight-earth);
+      transform: translate(calc(-50% + min(24vw, 375px)), -50%);
+      animation-name: flight-earth;
+    }
+
+    .hub-globe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle closest-side, transparent 79%, #81c4ff22 82%, #90d5ff9e 84%, #7fbeff25 85.7%, transparent 88%);
+      opacity: 0;
+      animation-name: flight-atmosphere;
+    }
+
+    .hub-flight-stage figcaption,
+    .hub-orbits { animation-name: flight-depart; }
+
+    .hub-intro { animation-name: flight-copy; }
+    .hub-hero-jumps { animation-name: flight-jumps; }
+    .hub-stars-distant { animation-name: flight-distant-stars; }
+    .hub-stars-near { animation-name: flight-near-stars; }
+    .hub-divisions-head { animation-name: flight-arrival; }
+    .hub-division-list { animation-name: flight-divisions; }
+
+    .hub-flight-stage .hub-planet,
+    .hub-globe::after,
+    .hub-flight-stage figcaption,
+    .hub-orbits,
+    .hub-stars,
+    .hub-intro,
+    .hub-hero-jumps,
+    .hub-divisions-head,
+    .hub-division-list {
+      animation-duration: auto;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: --flight;
+      animation-range: contain;
+    }
+
+    .hub-divisions {
+      min-height: clamp(530px, 68svh, 670px);
+      padding-block: 36px 42px;
+      border: 0;
+      background: linear-gradient(0deg, #090d15 0%, #090d15ec 16%, #090d1585 56%, transparent 100%);
+    }
+
+    .hub-divisions h2, .hub-divisions-head > p:last-child { text-shadow: 0 2px 18px #080b10; }
+    .hub-division-list { margin-top: 9px; }
+    .hub-intro:focus-within,
+    .hub-hero-jumps:focus-within,
+    .hub-division-list:focus-within { animation: none; }
+
+    .hub-division-list::before {
+      content: '';
+      position: absolute;
+      inset: 128px 6% auto;
+      height: 84px;
+      border-top: 1px solid #fac57258;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hub-division-choice { position: relative; }
+    .hub-division:first-child .hub-division-choice,
+    .hub-division:last-child .hub-division-choice { margin-top: 23px; }
+    .hub-division:nth-child(2) .hub-division-choice,
+    .hub-division:nth-child(4) .hub-division-choice { margin-top: 8px; }
+
+    @keyframes flight-earth {
+      0% { transform: translate(calc(-50% + min(24vw, 375px)), -50%) scale(1) rotate(0deg); }
+      34% {
+        transform: translate(calc(-50% + 12vw), calc(-50% + var(--flight-height) * .18)) scale(1.57) rotate(-8deg);
+        animation-timing-function: cubic-bezier(.32, .02, .32, 1);
+      }
+      83%, 100% {
+        transform: translate(-50%, calc(-50% + var(--flight-height) * .075 + var(--flight-earth) * 1.20)) scale(2.86) rotate(-16deg);
+      }
+    }
+
+    @keyframes flight-atmosphere {
+      0%, 14% { opacity: 0; }
+      78%, 100% { opacity: .64; }
+    }
+
+    @keyframes flight-depart {
+      0%, 8% { opacity: 1; }
+      38%, 100% { opacity: 0; }
+    }
+
+    @keyframes flight-copy {
+      0%, 12% { opacity: 1; pointer-events: auto; }
+      42% { opacity: 0; pointer-events: auto; }
+      43%, 100% { opacity: 0; pointer-events: none; }
+    }
+
+    @keyframes flight-jumps {
+      0%, 38% { opacity: 1; pointer-events: auto; }
+      58% { opacity: 0; pointer-events: auto; }
+      59%, 100% { opacity: 0; pointer-events: none; }
+    }
+
+    @keyframes flight-distant-stars { to { transform: translate(-18px, 24px) scale(1.07); } }
+    @keyframes flight-near-stars { to { transform: translate(-52px, 57px) scale(1.18); } }
+
+    @keyframes flight-arrival {
+      0%, 40% { opacity: 0; transform: translateY(15px); }
+      68%, 100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes flight-divisions {
+      0%, 48% { opacity: 0; transform: translateY(25px); }
+      83%, 100% { opacity: 1; transform: translateY(0); }
+    }
+  }
+}
+
+@supports (view-timeline-name: --flight) and (animation-timeline: --flight) and (animation-range: exit-crossing) {
+  @media (max-width: 620px) and (prefers-reduced-motion: no-preference) {
+    .hub-flight-stage {
+      view-timeline: --phone-flight block;
+      view-timeline-inset: var(--header-h) 0;
+    }
+
+    .hub-flight-stage .hub-planet,
+    .hub-flight-stage .hub-stars {
+      animation: phone-flight linear both;
+      animation-timeline: --phone-flight;
+      animation-range: exit-crossing;
+    }
+
+    .hub-flight-stage .hub-planet { --phone-approach: translateY(22px) scale(1.14) rotate(-6deg); }
+    .hub-stars-distant { --phone-approach: translateY(82px); }
+    .hub-stars-near { --phone-approach: translateY(28px); }
+
+    @keyframes phone-flight {
+      from { transform: none; }
+      to { transform: var(--phone-approach); }
+    }
+  }
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .hub-division-list { padding-bottom: 85px; }
+
+  .hub-division-detail {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    max-width: 430px;
+    margin-inline: auto;
+    padding: 10px 16px;
+    border-top: 1px solid #e9b46a78;
+    background: #0a0e16db;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hub-division:hover .hub-division-detail,
+  .hub-division:focus-within .hub-division-detail { opacity: 1; }
+  .hub-division-list:has(:focus-within) .hub-division:not(:focus-within) .hub-division-detail { opacity: 0; }
+}
+
+@media (min-width: 621px) and (max-width: 850px) {
+  .hub-flight-stage .hub-planet { right: -12%; }
+}
+
+@media (max-width: 620px) {
+  .hub-flight-stage {
+    grid-area: 2 / 1;
+    background:
+      radial-gradient(ellipse at 50% 48%, #1b3047, #101a29 34%, transparent 69%),
+      #0a0e16;
+  }
+
+  .hub-flight-stage .hub-planet {
+    width: min(100%, 400px);
+    right: auto;
+    margin: 0 auto;
+  }
+
+  .hub-flight-stage .hub-planet figcaption { right: 2%; }
+  .hub-hero-jumps { position: static; margin-block: 4px 1px; gap: 0 14px; }
+  .hub-hero-jumps a { font-size: 10px; }
+  .hub-divisions { grid-area: 3 / 1; }
+  .hub-division-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 13px; }
+  .hub-division:last-child { grid-column: 1 / -1; max-width: 180px; justify-self: center; }
+  .hub-division-choice { padding-inline: 10px; }
+}

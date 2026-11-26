@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>Hive Kids Bible · Hive Academy</title>
+<meta name="description" content="Hive Kids Bible, a Hive Academy preview: Bible story cards and verse games for young children and the grown-ups reading with them.">
+<meta name="theme-color" content="#111216">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/montserrat-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="data/stories.json" as="fetch" crossorigin>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#app">Skip to the stories</a>
+<!-- Breadcrumb header: replaces the shared Codex Hive Labs nav and the Academy banner on this module. The first crumb (official logo) links back to codex-hive.com. -->
+<nav class="bc" aria-label="Breadcrumb">
+  <div class="bc__in">
+    <ol class="bc__list" id="bc">
+      <li class="bc__item bc__item--home"><a href="https://codex-hive.com" aria-label="Codex Hive Labs, codex-hive.com"><picture><source type="image/webp" srcset="/chl-assets/codex-hive-mark-1x.webp 1x, /chl-assets/codex-hive-mark-2x.webp 2x, /chl-assets/codex-hive-mark-3x.webp 3x"><img src="/chl-assets/codex-hive-mark-1x.png" srcset="/chl-assets/codex-hive-mark-1x.png 1x, /chl-assets/codex-hive-mark-2x.png 2x, /chl-assets/codex-hive-mark-3x.png 3x" width="26" height="32" alt="" decoding="async"></picture><span class="bc__t">Codex Hive <span class="bc__labs">Labs</span></span></a></li>
+      <li class="bc__item bc__item--academy"><a href="/" aria-label="Hive Academy"><span class="bc__t">Hive Academy</span><span class="bc__dots" aria-hidden="true">…</span></a></li>
+      <li class="bc__item bc__item--module"><a href="#/" aria-current="page">Hive Kids Bible</a></li>
+    </ol>
+    <span class="badge bc__badge">Preview</span>
+  </div>
+</nav>
+
+<header class="top">
+  <div class="wrap top__in">
+    <a class="top__home" href="#/" aria-label="Hive Kids Bible: all stories">
+      <img src="/assets/brand/academy-icon-128.webp" srcset="/assets/brand/academy-icon-128.webp 1x, /assets/brand/academy-icon-256.webp 2x" width="40" height="40" alt="">
+      <span class="top__name">Hive Kids Bible</span>
+    </a>
+    <nav class="tabs" aria-label="Hive Kids Bible">
+      <a href="#/" data-tab="stories">Stories</a>
+      <a href="#/progress" data-tab="progress">My stars</a>
+    </nav>
+    <div class="tr" role="group" aria-label="Bible translation">
+      <button type="button" data-tr="KJV" aria-pressed="true" title="King James Version">KJV</button>
+      <button type="button" data-tr="WEB" aria-pressed="false" title="World English Bible">WEB</button>
+    </div>
+  </div>
+</header>
+
+<main id="app" class="wrap" tabindex="-1" aria-live="polite">
+  <noscript><p class="note">Hive Kids Bible needs JavaScript to run the story cards and verse games.</p></noscript>
+  <p class="loading">Loading stories…</p>
+</main>
+<div id="say" class="sr-only" aria-live="assertive"></div>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p id="trnote">Scripture quotations are from the <strong>King James Version (1769)</strong>, public domain outside the UK.</p>
+    <p>Your stars and streak are saved only in this browser on this device (local storage). There are no accounts, no ads, and no tracking. Your progress is never sent to us.</p>
+    <p><img src="/assets/brand/academy-wordmark-dark-360.webp" width="180" height="26" alt="Hive Academy"> © 2026 Codex Hive Labs LLC · <a href="https://codex-hive.com">codex-hive.com</a></p>
+  </div>
+</footer>
+<script src="app.js" defer></script>
+</body>
+</html>

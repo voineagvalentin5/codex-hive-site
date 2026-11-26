@@ -1,0 +1,70 @@
+{
+  "hub": {
+    "repository": "https://github.com/voineagvalentin5/codex-hive-site",
+    "baseline_commit": "a10b4ab4207a74db4c7f35fdebd488b4ca1c3ec3",
+    "publish_root": "docs",
+    "site": "https://codex-hive.com/"
+  },
+  "upstreams": [
+    {
+      "repository": "https://github.com/voineagvalentin5/hive-academy",
+      "commit": "ace4a70b6b6aea2202af03daf59d3f6ebd403304",
+      "site": "https://academy.codex-hive.com/",
+      "local_path": "sites/hive-academy",
+      "publish_root": ".",
+      "tracked_files": 58
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/hive-astra",
+      "commit": "00712c1cee4cce981760e9dbc4d5eaf8139a851f",
+      "site": "https://astra.codex-hive.com/",
+      "local_path": "sites/hive-astra",
+      "publish_root": ".",
+      "tracked_files": 56
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/hive-babble",
+      "commit": "05d56c6e87fb908c7499edb1751b56837230580b",
+      "site": "https://babble.codex-hive.com/",
+      "local_path": "sites/hive-babble",
+      "publish_root": "docs",
+      "tracked_files": 72
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/hive-buzz-newz",
+      "commit": "101c9ff80cf6f098daa47fa213ff223417c7e0c5",
+      "site": "https://newz.codex-hive.com/",
+      "local_path": "sites/hive-buzz-newz",
+      "publish_root": ".",
+      "tracked_files": 39
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/hive-scribe",
+      "commit": "21a7abb31bf615f4e06350bcc83939a2e36b5c31",
+      "site": "https://scribe.codex-hive.com/",
+      "local_path": "sites/hive-scribe",
+      "publish_root": ".",
+      "tracked_files": 1652
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/earth-resonance-observatory",
+      "commit": "ccebb694864304cb4ee38ca787ba80855a26d592",
+      "site": "https://ero.codex-hive.com/",
+      "local_path": "sites/earth-resonance-observatory",
+      "publish_root": "out (Next.js static export)",
+      "tracked_files": 66
+    },
+    {
+      "repository": "https://github.com/voineagvalentin5/combos-demo",
+      "commit": "ca959a0c7ac6eb09aa206889454a118f05446417",
+      "site": null,
+      "local_path": "sites/combos-demo",
+      "publish_root": ".",
+      "tracked_files": 2
+    }
+  ],
+  "previews": {
+    "astra": "previews/astra",
+    "ero": "previews/ero"
+  }
+}

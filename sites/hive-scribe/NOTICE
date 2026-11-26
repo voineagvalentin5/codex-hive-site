@@ -1,0 +1,330 @@
+NOTICE
+======
+
+Hive Scribe third-party data, text, and font attributions
+Codex Hive Labs — https://scribe.codex-hive.com
+
+This application redistributes the following works. Each remains under its
+own license. The short summaries below are for convenience; the official
+license text or URI is controlling.
+
+-------------------------------------------------------------------------------
+1. World English Bible (English, all books; alternative English text)
+-------------------------------------------------------------------------------
+
+World English Bible, 2020 stable text, including the deuterocanonical books
+(eBible.org “eng-web”). Public domain.
+
+Chapter and verse numbers follow the WEB (English tradition). Esther uses the
+WEB’s Greek Esther (with the additions) and Daniel the WEB’s Greek Daniel
+(with the Prayer of Azariah and Song of the Three, Susanna, and Bel and the
+Dragon). Baruch 6 is the Letter of Jeremiah.
+
+-------------------------------------------------------------------------------
+2. STEPBible TAHOT, TAGNT, TBESH, and TBESG
+     © Tyndale House, Cambridge / STEPBible.org
+     Creative Commons Attribution 4.0 International (CC BY 4.0)
+-------------------------------------------------------------------------------
+
+License: https://creativecommons.org/licenses/by/4.0/
+Source:  https://github.com/STEPBible/STEPBible-Data
+         https://stepbible.org
+
+Used here:
+
+  • TAHOT (Translators Amalgamated Hebrew OT) — Hebrew and Aramaic Old
+    Testament word-level text, morphology (ETCBC parsing in OpenScriptures
+    / OSHB code format), extended Strong’s lemmas, English glosses,
+    transliteration, and Qere/Ketiv marks. The Hebrew base text is the
+    Westminster Leningrad Codex (WLC 4.20, public domain) via OpenScriptures,
+    with Tyndale corrections toward the Leningrad Codex. Words are regrouped
+    by WEB verse for display; slash separators are removed.
+
+  • TAGNT — English word glosses, transliteration, and Strong’s numbers for
+    the Greek New Testament, matched word by word to the SBLGNT text (words
+    TAGNT lists for the SBL edition only).
+
+  • TBESH (Hebrew/Aramaic) and TBESG (Greek) — brief lexicons. Definitions
+    are shortened to about 300 characters. Occurrence counts are computed
+    in this app from the Hebrew OT and Greek NT texts used here (not from
+    the LXX or Targum).
+
+Attribution: Data from STEPBible.org, Tyndale House, Cambridge, used under
+the Creative Commons Attribution 4.0 International License.
+
+-------------------------------------------------------------------------------
+3. SBL Greek New Testament (SBLGNT)
+     © 2010 Society of Biblical Literature and Logos Bible Software
+-------------------------------------------------------------------------------
+
+The Greek New Testament text is the SBL Greek New Testament, copyright
+© 2010 Society of Biblical Literature and Logos Bible Software, used under
+the SBLGNT license:
+
+    https://sblgnt.com/license/
+
+The official license page presents the Creative Commons Attribution 4.0
+International Public License (https://creativecommons.org/licenses/by/4.0/).
+
+The WEB English text follows the Majority Text in some places, so a few WEB
+verses (for example John 7:53–8:11 and Acts 8:37) have no SBLGNT text. In
+those verses the SBLGNT card shows the RP2018 or TR text instead, labelled
+as a textual variant (see items 12 and 15).
+
+-------------------------------------------------------------------------------
+4. MorphGNT (morphology and lemmas of the SBLGNT)
+     Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+-------------------------------------------------------------------------------
+
+License: https://creativecommons.org/licenses/by-sa/3.0/
+Source:  https://github.com/morphgnt/sblgnt
+
+Morphology and lemmas for the SBL Greek New Testament. This app displays
+MorphGNT parsing codes and a plain-English decoding of them.
+
+-------------------------------------------------------------------------------
+5. Brenton’s Septuagint with Apocrypha
+-------------------------------------------------------------------------------
+
+Greek text of Brenton’s Septuagint with Apocrypha (eBible.org “grcbrent”).
+Public domain.
+
+This app includes the Greek text only: no lemmas, glosses, or morphological
+tagging. Verses are placed next to WEB English verses by automatic alignment
+with Brenton’s public-domain English translation of the same Greek; the LXX
+reference is always shown. Placement is least reliable in Jeremiah, 1 Kings
+(3 Kingdoms), Nehemiah, Proverbs 24–31, Exodus 35–40, and Sirach 30–36;
+about 2% of Old Testament verses have no LXX match.
+
+-------------------------------------------------------------------------------
+6. Targums (Sefaria public-domain editions)
+-------------------------------------------------------------------------------
+
+  • Targum Onkelos on the Torah (Sefaria “Onkelos Genesis…Deuteronomy”,
+    source toratemetfreeware.com), public domain.
+  • Targum Jonathan on the Prophets, Joshua–Kings and Isaiah–Malachi
+    (Sefaria “Mikraot Gedolot”), public domain.
+
+From the Sefaria API: https://www.sefaria.org
+
+Hebrew verse numbers were converted to English ones with TAHOT’s verse map.
+Text only: no glosses or parsing. No Targum is included for the Writings.
+
+-------------------------------------------------------------------------------
+7. OpenBible.info cross-references
+     Creative Commons Attribution 4.0 International (CC BY 4.0)
+-------------------------------------------------------------------------------
+
+License: https://creativecommons.org/licenses/by/4.0/
+Source:  https://www.openbible.info/labs/cross-references/
+Data file dated 2026-11-09.
+
+Top 10 links per verse by votes; zero and negative votes dropped.
+OpenBible.info has no data for the deuterocanonical books.
+
+Attribution: Bible cross-references from OpenBible.info, used under
+the Creative Commons Attribution 4.0 International License.
+
+-------------------------------------------------------------------------------
+8. Noto Serif and Noto Serif Hebrew fonts
+     SIL Open Font License, Version 1.1
+-------------------------------------------------------------------------------
+
+Copyright 2022 The Noto Project Authors
+https://github.com/notofonts/hebrew
+
+Licensed under the SIL Open Font License, Version 1.1.
+The full license text is included at fonts/OFL.txt
+and is also available at https://openfontlicense.org
+
+-------------------------------------------------------------------------------
+9. Clementine Vulgate (Latin, all 73 books where a match was found)
+-------------------------------------------------------------------------------
+
+Clementine Vulgate Latin text, public domain, from Michael Tweedale’s
+transcription (vulsearch), via the Open Bibles collection:
+
+    https://github.com/seven1m/open-bibles
+    (lat-clementine.usfx.xml)
+
+Users of that transcription are requested to acknowledge the source and to
+make any modifications clear. The wording of the Latin is unaltered. Verses
+were grouped to the World English Bible by automatic alignment with the
+public-domain Douay-Rheims in the same collection (eng-dra.usfx.xml). The
+Vulgate chapter and verse reference is always shown when it differs (for
+example in the Psalms). Text only: no glosses or parsing.
+
+-------------------------------------------------------------------------------
+10. three.js (Canonical Chords visualization)
+      MIT License
+-------------------------------------------------------------------------------
+
+three.js r170.0, © 2010-2025 three.js authors.
+https://github.com/mrdoob/three.js
+License text is included at vendor/LICENSE.
+
+The library is vendored in this app (vendor/three.module.min.js) so the
+visualization works offline. No CDN is used.
+
+-------------------------------------------------------------------------------
+11. Studies and texts not included
+-------------------------------------------------------------------------------
+
+Guided Studies in this app present a named author’s position in original
+lesson notes written for Hive Scribe. They do not reproduce copyrighted
+book text. The first bundled study, “The Oneness of God,” follows the
+chapter titles and order of David K. Bernard, The Oneness of God (Word
+Aflame Press, 1983). Lesson summaries, reflection questions, and verse
+notes are original to this app. Scripture is cited from the World English
+Bible (public domain).
+
+Hebrew and Aramaic fragments that exist but are not packaged here are
+not invented: Sirach is known in Hebrew for about two-thirds of the book
+(Cairo Geniza, Masada, and related finds); Tobit is attested in Aramaic
+and Hebrew fragments from Qumran; a Greek fragment of the Letter of
+Jeremiah (Baruch 6) is known as 7Q2. This app uses the Brenton Septuagint
+(and the Vulgate where aligned) for those books, not those fragments.
+
+-------------------------------------------------------------------------------
+12. Robinson-Pierpont Byzantine Textform 2018 (Greek NT, 27 books)
+     Public domain (CC0 1.0 Universal)
+-------------------------------------------------------------------------------
+
+Source:  https://github.com/byztxt/byzantine-majority-text (commit 788ffe7)
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+The repository's LICENSE file states: "THIS REPOSITORY, INCLUDING CODE AND
+TEXTUAL CONTENTS, IS IN THE PUBLIC DOMAIN." followed by the CC0 1.0
+Universal dedication. Maurice A. Robinson and William G. Pierpont, The New
+Testament in the Original Greek: Byzantine Textform (RP2018).
+
+Used here: the accented Unicode text (csv-unicode/ccat/no-variants, main
+text without the apparatus) paired word for word with Dr. Robinson's
+Strong's numbers and parsing codes (csv-unicode/strongs/with-parsing).
+English glosses and transliterations shown with this text are borrowed
+from STEPBible TAGNT (CC BY 4.0, see section 2) where the same word
+appears in the SBLGNT layer; otherwise the TBESG brief gloss and a
+computed transliteration are used. Verses are stored under WEB numbering,
+which matches RP's.
+
+-------------------------------------------------------------------------------
+13. Orthodox / Septuagint and appendix books
+     Public domain
+-------------------------------------------------------------------------------
+
+Prayer of Manasseh, 1 Esdras, 3 Maccabees, 4 Maccabees, Psalm 151 and
+2 Esdras. English: World English Bible (eBible.org "eng-web"); its about
+page states "The World English Bible is in the Public Domain." Greek:
+Brenton's Septuagint with Apocrypha (eBible.org "grcbrent"), marked
+Public Domain by eBible.org; Brenton has no 2 Esdras, so that book is
+English only. Greek verses are placed next to WEB verses verse by verse
+where the numbering is identical, otherwise by the same automatic
+English-to-English alignment as the rest of the Septuagint layer; the LXX
+reference is always shown. Text only: no glosses, lemmas or parsing.
+
+-------------------------------------------------------------------------------
+14. King James Version (1769) with the Apocrypha (default English text)
+     Public domain (outside the United Kingdom)
+-------------------------------------------------------------------------------
+
+Source: eBible.org "eng-kjv" (King James Version + Apocrypha),
+https://ebible.org/Scriptures/eng-kjv_vpl.zip, "The King James Version or
+Authorized Version of the Holy Bible, using the standardized text of 1769,
+with Apocrypha/Deuterocanon", brought "courtesy of the Crosswire Bible
+Society and eBible.org". eBible.org marks it "Public Domain" and states:
+"Letters patent issued by King James with no expiration date means that to
+print this translation in the United Kingdom or import printed copies into
+the UK, you need permission. Currently, the Cambridge University Press, the
+Oxford University Press, and Collins have the exclusive right to print this
+Bible translation in the UK. This royal decree has no effect outside of the
+UK, where this work is firmly in the Public Domain."
+
+The wording is unaltered. Words the translators supplied (bracketed in the
+source) are shown in italics. The KJV is placed on the app's verse labels
+(WEB numbering) so the original-language layers stay aligned; where the KJV
+numbers differently its own reference is shown (Romans 16:25-27 at
+14:24-26; the Rest of Esther in Greek Esther; the Song of the Three
+Children, Susanna and Bel in Daniel 3, 13 and 14; a few Sirach verses;
+2 Esdras 7). Placement in those books was done automatically by comparing
+the KJV with the WEB. 3 and 4 Maccabees and Psalm 151 are not in the KJV
+and are shown in the WEB. The WEB remains selectable in Settings and the
+reading bar.
+
+-------------------------------------------------------------------------------
+15. Scrivener's 1894 Textus Receptus (4 Greek NT verses)
+     Dr. Maurice A. Robinson's transcription — Public domain
+-------------------------------------------------------------------------------
+
+Source:  https://github.com/byztxt/greektext-scrivener (commit 6049a43,
+         textonly/LU.SCV and AC.SCV)
+License: the repository README states "License? Public Domain. Copy freely."
+
+Used only for Luke 17:36, Acts 8:37, Acts 15:34 and Acts 24:7, which are in
+the KJV but in neither the SBLGNT nor RP2018. The transcription is unaccented
+and uses Latin letters; it was converted letter for letter to Greek script
+(final sigma kept as written). These verses are labelled "Textual Variant:
+TR". Where the SBLGNT lacks a verse that RP2018 has (e.g. John 7:53-8:11),
+the SBLGNT card shows the RP2018 text labelled "Textual Variant: Byzantine".
+
+-------------------------------------------------------------------------------
+16. William Whitaker's WORDS (Latin stems, endings and meanings)
+     Copyright William A. Whitaker (1936-2010)
+-------------------------------------------------------------------------------
+
+Source:  https://github.com/mk270/whitakers-words (commit fb7fb6f;
+         DICTLINE.GEN, INFLECTS.LAT, UNIQUES.LAT)
+License (LICENCE.txt): "This is a free program, which means it is proper to
+copy it and pass it on to your friends. Consider it a developmental item for
+which there is no charge. However, just for form, it is Copyrighted (c).
+Permission is hereby freely given for any and all use of program and data.
+You can sell it as your own, but at least tell me. ... All parts of the
+WORDS system, source code and data files, are made freely available to
+anyone who wishes to use them, for whatever purpose."
+
+Stored in data/morph/lat.json.gz: stems, part of speech and class, frequency
+code and a shortened English meaning for each entry (rare entries outside
+ecclesiastical Latin are left out), plus the ending table and the irregular
+forms list. The app uses them to suggest possible dictionary entries and
+parses for words of the Clementine Vulgate. These are labelled "approximate
+match"; they are not an exact parse of the Vulgate text.
+
+-------------------------------------------------------------------------------
+17. Approximate word-matching tables (derived in this app)
+-------------------------------------------------------------------------------
+
+data/morph/gform.json.gz and data/morph/hform.json.gz list spellings that are
+word-tagged in the app's own data (SBLGNT text with STEPBible TAGNT Strong's
+numbers, RP2018, and STEPBible TAHOT) with the Strong's keys they are tagged
+with. They are derived from items 2, 3 and 12 above, under the same terms
+(CC BY 4.0 / public domain). The Septuagint, Targum, Vulgate and TR verses
+use them, together with the TBESG/TBESH headwords, to suggest a lexicon
+entry for an untagged word. Every such suggestion carries an "approximate
+match" label and a confidence level.
+
+-------------------------------------------------------------------------------
+18. Reina-Valera 1909 (Español) — bundled Spanish text of the 66 Protestant books
+     Public Domain / Dominio Público
+-------------------------------------------------------------------------------
+
+Source: eBible.org "spaRV1909" (Santa Biblia — Reina Valera 1909),
+https://ebible.org/Scriptures/spaRV1909_vpl.zip (USFM also at
+https://ebible.org/Scriptures/spaRV1909_usfm.zip), "The Holy Bible in Spanish,
+Reina Valera translation of 1909." eBible.org marks it "Public Domain" /
+"Dominio Público." Language: Español (Spanish). Dialect: Castellano 1909.
+Translation by: Reina y Valera. eBible.org source files dated 10 Aug 2015;
+the package used here was generated by Haiola / eBible.org on 30 Oct 2026.
+Copyright page: https://ebible.org/spaRV1909/copyright.htm
+
+The wording is unaltered. The 66 Protestant books are stored in
+data/rvr1909/*.json.gz and work offline, like the KJV. Verses are placed on
+the app's verse labels (WEB numbering) so the original-language layers stay
+aligned; where the RVR 1909 numbers a verse differently its own reference is
+shown (Romans 16:25-27 at 14:24-26; Esther 4:5-6, 9:4-5 and 9:29-30 combined;
+Daniel 3:24-30 at 3:91-97). The RVR 1909 does not include the Greek additions
+to Esther and Daniel, or Daniel 13-14 (Susanna, Bel and the Dragon). Those
+verses, and the deuterocanonical or Orthodox books, are noted as not in the
+RVR 1909 or shown in the KJV or WEB.
+
+-------------------------------------------------------------------------------
+End of NOTICE
+

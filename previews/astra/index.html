@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080e15">
+  <meta name="description" content="Explore the solar system, replay historic space weather, and see the sky over your city.">
+  <title>Hive Astra — The Observatory</title>
+  <link rel="icon" href="assets/icon.png">
+  <link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="astra.css?v=3">
+  <script src="globe.js" defer></script>
+  <script src="astra-data.js" defer></script>
+  <script src="astra.js?v=3" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#observatory" aria-label="Hive Astra observatory">
+      <img src="assets/icon.png" alt="" width="38" height="38">
+      <span>HIVE <strong>ASTRA</strong><small>BY CODEX HIVE LABS</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#observatory" data-nav="observatory">Home</a>
+      <a href="#explore" data-nav="explore">Planets</a>
+      <a href="#sky" data-nav="sky">Your sky</a>
+      <a href="#weather" data-nav="weather">Space weather</a>
+      <a href="#missions" data-nav="missions">Missions</a>
+      <a href="#learn" data-nav="learn">Lessons</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="observatory" class="scroll-section" aria-labelledby="home-title">
+      <div class="hero">
+        <div class="hero-art" aria-hidden="true">
+          <canvas class="star-canvas" id="hero-stars"></canvas>
+          <div class="hero-earth"><canvas id="hero-globe"></canvas></div>
+        </div>
+        <div class="hero-inner shell">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="signal-dot"></span> THE SOLAR SYSTEM OBSERVATORY</p>
+            <h1 id="home-title">Space is<br> <em>happening.</em></h1>
+            <p class="hero-description">Watch the Sun, travel between worlds, and see what’s above you tonight.</p>
+            <div class="actions">
+              <a class="button button--gold" href="#explore">Explore planets <span aria-hidden="true">→</span></a>
+              <a class="button button--glass" href="#sky">See your sky <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+          <div class="earth-tag"><span></span><div><strong>EARTH</strong><small>NASA BLUE &amp; BLACK MARBLE · COMPOSITE</small></div></div>
+        </div>
+      </div>
+      <div class="shell home-content">
+        <section class="telemetry" aria-label="Latest space weather measurements">
+          <article class="signal-card"><div class="signal-icon" aria-hidden="true">≋</div><div><h2>Geomagnetic activity</h2><p><strong id="kp-value">—</strong><span id="kp-note">Loading NOAA observations</span></p></div></article>
+          <article class="signal-card"><div class="signal-icon signal-icon--sun" aria-hidden="true">☼</div><div><h2>Solar flares</h2><p><strong id="flare-value">—</strong><span id="flare-note">Loading NASA reports</span></p></div></article>
+          <article class="signal-card"><div class="signal-icon" aria-hidden="true">⌖</div><div><h2>ISS ground position</h2><p><strong id="iss-value">—</strong><span id="iss-note">Loading station position</span></p></div></article>
+        </section>
+        <div class="telemetry-footer">
+          <span>Observation times are UTC.</span>
+          <div class="telemetry-links"><a href="#weather">See space weather <span aria-hidden="true">→</span></a><a href="#replay">Replay a solar storm <span aria-hidden="true">→</span></a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="explore" class="shell page-section scroll-section" aria-labelledby="explore-title">
+      <div class="view-heading"><h2 class="section-title" id="explore-title">Planets and moons</h2><a class="text-link" href="instruments.html#explore">See their orbits ↗</a></div>
+      <label class="city-label planet-picker">Choose a world <select id="planet-picker"></select></label>
+      <div class="explorer-layout">
+        <aside class="planet-menu" aria-label="Solar system objects" id="planet-menu"></aside>
+        <div class="scene explorer-scene">
+          <span class="scene-label">TEXTURED PLANET VIEW</span>
+          <div class="planet-frame"><canvas id="planet-globe" aria-label="Rotatable close-up of the selected planet" tabindex="0"></canvas></div>
+          <p class="scene-help">Drag to rotate · Arrow keys to turn</p>
+        </div>
+        <aside class="detail-panel" id="planet-detail" aria-live="polite"></aside>
+      </div>
+    </section>
+
+    <section id="sky" class="shell page-section scroll-section" aria-labelledby="sky-title">
+      <div class="view-heading">
+        <h2 class="section-title" id="sky-title">Your sky</h2>
+        <label class="city-label">Observing from <select id="sky-city"></select></label>
+      </div>
+      <div class="replay-layout">
+        <div class="scene sky-scene" id="sky-scene">
+          <canvas id="sky-stars" class="star-canvas" aria-hidden="true"></canvas><span class="scene-label">CALCULATED SUN POSITION</span>
+          <div class="sky-sun" id="sky-sun" aria-hidden="true"></div><div class="horizon" aria-hidden="true"></div>
+          <div class="sky-compass" aria-hidden="true"><span>N</span><span>E</span><span>S</span><span>W</span><span>N</span></div>
+          <p class="scene-help">Illustrative horizon · Local weather and terrain are excluded</p>
+        </div>
+        <div class="detail-panel" aria-live="polite">
+          <p class="eyebrow" id="sky-date"></p><h3 class="detail-title" id="sky-name"></h3><p id="sky-condition"></p>
+          <dl class="fact-row"><div><dt>SUN ALTITUDE</dt><dd id="sky-altitude"></dd></div><div><dt>LOCAL TIME</dt><dd id="sky-time"></dd></div></dl>
+          <label class="city-label">Compare at the same instant <select id="sky-compare"><option value="">Choose a second city</option></select></label>
+          <p id="sky-comparison" hidden></p>
+          <a class="text-link" href="#weather">Explore space weather →</a>
+        </div>
+      </div>
+      <div class="playback sky-playback">
+        <button class="button button--glass" id="sky-now" type="button">Now</button>
+        <div class="timeline">
+          <label class="visually-hidden" for="sky-range">Hours from the present</label><input id="sky-range" type="range" min="-12" max="12" value="0">
+          <div class="sky-ticks"><span>−12 hours</span><span>Now</span><span>+12 hours</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="weather" class="shell page-section scroll-section" aria-labelledby="weather-title">
+      <div class="view-heading"><h2 class="section-title" id="weather-title">Space weather</h2><a class="text-link" href="instruments.html#signals">Open forecasts and charts ↗</a></div>
+      <section id="replay" class="scroll-section" aria-labelledby="replay-title">
+        <div class="view-heading">
+          <div><p class="eyebrow"><span class="signal-dot signal-dot--archive"></span> HISTORICAL REPLAY · 8–11 MAY 2024</p><h3 id="replay-title">Follow a solar storm.</h3></div>
+          <button class="button button--glass" type="button" id="share-replay">Copy replay link <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="replay-layout">
+          <div class="scene replay-scene" id="replay-scene" data-phase="sun">
+            <span class="scene-label" id="replay-label">ILLUSTRATION · SUN</span>
+            <div class="transit-sun" aria-hidden="true"><canvas id="transit-sun"></canvas><span>SUN</span></div>
+            <div class="replay-globe-frame"><canvas id="replay-globe" aria-hidden="true"></canvas><span class="transit-label" aria-hidden="true">EARTH</span></div>
+            <div class="storm-trail" aria-hidden="true"></div>
+            <p class="scene-help" id="replay-scene-help">Illustration · Sizes and distances are approximate</p>
+          </div>
+          <div class="detail-panel replay-details" aria-live="polite">
+            <p class="eyebrow" id="step-kind"></p><h4 class="detail-title" id="step-title"></h4><p id="step-copy"></p>
+            <dl class="fact-row"><div><dt id="step-metric-label"></dt><dd id="step-metric"></dd></div><div><dt>ARCHIVE DATE</dt><dd id="step-date"></dd></div></dl>
+            <a id="step-source" class="text-link" target="_blank" rel="noopener noreferrer">Read the source ↗</a>
+          </div>
+        </div>
+        <div class="playback">
+          <button type="button" id="play-replay" class="button button--gold" aria-label="Play replay"><span aria-hidden="true">▶</span> Play</button>
+          <div class="timeline">
+            <label class="visually-hidden" for="replay-range">Replay waypoint</label><input id="replay-range" type="range" min="0" max="3" step="1" value="0">
+            <div id="replay-stops" class="timeline-stops"></div>
+          </div>
+          <button type="button" id="next-step" class="button button--glass">Next <span aria-hidden="true">→</span></button>
+        </div>
+        <p id="share-status" class="status" role="status"></p>
+      </section>
+    </section>
+
+    <section id="missions" class="shell page-section scroll-section" aria-labelledby="missions-title">
+      <div class="view-heading"><h2 class="section-title" id="missions-title">Space missions</h2><a class="text-link" href="instruments.html#missions">Open full mission directory ↗</a></div>
+      <div class="mission-grid" id="mission-grid"></div>
+    </section>
+
+    <section id="learn" class="shell page-section scroll-section" aria-labelledby="learn-title">
+      <div class="view-heading"><div><p class="eyebrow">HIVE ACADEMY</p><h2 class="section-title" id="learn-title">Learn by exploring.</h2></div><a class="text-link" href="instruments.html#learn">Open all six field guides ↗</a></div>
+      <div class="learn-grid">
+        <article class="learn-card"><span aria-hidden="true">☼</span><h3>Read a solar storm</h3><p>Trace the Gannon storm and identify which observations came from the Sun and which came from Earth.</p><a class="text-link" href="#replay">Run the storm replay →</a></article>
+        <article class="learn-card"><span aria-hidden="true">◉</span><h3>Planetary scale</h3><p>Compare planetary diameters and distances. Then open the orbital model to see which proportions the model changes.</p><a class="text-link" href="#explore">Compare the worlds →</a></article>
+        <article class="learn-card"><span aria-hidden="true">◴</span><h3>Day and night</h3><p>Compare two cities at the same instant, then use the time slider to find when the Sun crosses the horizon.</p><a class="text-link" href="#sky">Open your sky →</a></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <a href="https://codex-hive.com/">Codex Hive Labs</a><a href="#learn">Lessons &amp; field guides</a><a href="instruments.html">Original instruments</a>
+    <button type="button" id="open-sources" class="plain-button">Sources &amp; credits</button>
+  </footer>
+  <dialog id="sources-dialog" aria-labelledby="sources-title">
+    <form method="dialog"><button class="plain-button dialog-close" aria-label="Close sources">✕</button></form>
+    <h2 id="sources-title">Sources &amp; credits</h2>
+    <ul>
+      <li><a href="https://science.nasa.gov/earth/earth-observatory/the-blue-marble-true-color-global-imagery-at-1km-resolution/">NASA Blue Marble</a> · Daytime imagery and historical cloud composite (NASA GSFC / Reto Stöckli and Robert Simmon).</li>
+      <li><a href="https://science.nasa.gov/earth/earth-observatory/earth-at-night/maps/">NASA Black Marble</a> · Historical night imagery (NASA Earth Observatory / Joshua Stevens; Suomi NPP VIIRS data from Miguel Román).</li>
+      <li><a href="https://www.solarsystemscope.com/textures/">Solar System Scope</a> · Planet textures, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; resized for the web.</li>
+      <li><a href="https://www.spaceweather.gov/products/planetary-k-index">NOAA SWPC</a> · Observed planetary Kp.</li>
+      <li><a href="https://ccmc.gsfc.nasa.gov/DONKI/">NASA DONKI</a> · Reported solar flares.</li>
+      <li><a href="https://wheretheiss.at/">Where the ISS At?</a> · ISS ground position.</li>
+      <li><a href="https://ccmc.gsfc.nasa.gov/storms/may2024/">NASA CCMC</a> and <a href="https://www.ngdc.noaa.gov/stp/space-weather/swpc-products/weekly_reports/PRFs_of_SGD/2024/05/prf2541.pdf">NOAA’s event summary</a> · Gannon storm.</li>
+      <li><a href="https://gml.noaa.gov/grad/solcalc/calcdetails.html">NOAA solar calculation details</a> · Approximate solar position.</li>
+    </ul>
+    <p>Mission imagery is credited on each card. For official space-weather alerts, consult NOAA SWPC.</p>
+  </dialog>
+  <noscript><p class="shell">Enable JavaScript to use Astra’s interactive views.</p></noscript>
+</body>
+</html>

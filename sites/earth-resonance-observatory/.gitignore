@@ -1,0 +1,9 @@
+node_modules/
+.next/
+out/
+*.log
+.DS_Store
+.next-preview/
+public/data/*
+!public/data/history/
+!public/data/history/**

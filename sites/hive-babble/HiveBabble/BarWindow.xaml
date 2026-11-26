@@ -1,0 +1,28 @@
+<Window Icon="pack://application:,,,/app.ico" x:Class="HiveBabble.BarWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Hive-Babble Bar" Height="60" Width="720" WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" Topmost="True" ResizeMode="NoResize" ShowInTaskbar="False" ShowActivated="False">
+  <Border BorderBrush="#55FFFFFF" BorderThickness="1,1,1,0" CornerRadius="12,12,0,0" MouseLeftButtonDown="Bar_MouseLeftButtonDown">
+    <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="0,1"><GradientStop Color="#33FFFFFF" Offset="0"/><GradientStop Color="#0DFFFFFF" Offset="0.45"/><GradientStop Color="#1A151A20" Offset="1"/></LinearGradientBrush></Border.Background>
+    <DockPanel LastChildFill="True" Margin="12,8">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <Button x:Name="LockButton" Style="{StaticResource BarButton}" Content="Lock" ToolTip="Click through the frame · Ctrl+Alt+L" Click="Lock_Click"/>
+        <Button x:Name="PauseButton" Style="{StaticResource BarButton}" Content="Pause" Click="Pause_Click"/>
+        <Button x:Name="LangButton" Style="{StaticResource BarButton}" Content="EN &#x25BE;" ToolTip="Target language" Click="Lang_Click"/>
+        <Button x:Name="ModeButton" Style="{StaticResource BarButton}" Content="Overlay &#x25BE;" ToolTip="Overlay, side panel, or both" Click="Mode_Click"/>
+        <Button Style="{StaticResource BarButton}" Content="&#xE713;" FontFamily="Segoe MDL2 Assets" ToolTip="Settings" AutomationProperties.Name="Settings" Click="Settings_Click"/>
+        <Button Style="{StaticResource BarButton}" Content="&#xE711;" FontFamily="Segoe MDL2 Assets" Background="Transparent" ToolTip="Close" AutomationProperties.Name="Close" Click="Close_Click"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0">
+        <Grid Width="27" Height="30" Margin="0,0,9,0">
+          <Path Stroke="#E0A526" StrokeThickness="1.5" Data="M13,1 L25,8 L25,22 L13,29 L1,22 L1,8 Z"/>
+          <Path Fill="#E0A526" Data="M13,8 L19,11.5 L19,18.5 L13,22 L7,18.5 L7,11.5 Z"/>
+        </Grid>
+        <StackPanel VerticalAlignment="Center">
+          <TextBlock Foreground="#F2F0E9" FontSize="13" FontWeight="SemiBold" Text="Hive-Babble"/>
+          <TextBlock Foreground="#94A0AC" FontSize="10" Margin="0,3,0,0" Text="Read the world."/>
+        </StackPanel>
+      </StackPanel>
+    </DockPanel>
+  </Border>
+</Window>

@@ -1,0 +1,18 @@
+bin/
+obj/
+Builds/
+.vs/
+*.user
+
+translator/
+*.log
+
+# never keep screenshots
+*.png
+!HiveBabble/app-icon.png
+
+# release packaging
+Builds/
+packaging/Output/
+!branding/hive-babble-logo.png
+!HiveBabble/settings-logo.png

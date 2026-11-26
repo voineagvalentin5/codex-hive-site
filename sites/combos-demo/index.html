@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CombOS Swarm Demo — Hybrid Active HiveMind</title>
+<meta name="description" content="Interactive demo of CombOS: a bio-inspired distributed operating system with self-healing, pulse propagation, and quorum consensus.">
+<style>
+  :root{
+    /* Vibrant palette (neighbors look) */
+    --bg:#0b0c10; --panel:#0f1421; --ink:#e8ecff; --muted:#a6b5ffb3;
+    --queen:#ffd166; --worker:#66d9ef; --sentinel:#ff6b6b; --drone:#7bd88f;
+    --pulse:#ffffff2a; --accent:#7aa2ff; --halo:#ff817a;
+    --link:#9fb3ff22; --linkActive:#a8b6ff33;
+    --ok:#a3ffcc; --warn:#ffd166;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:radial-gradient(1100px 520px at 20% 0%, #101528 8%, #0b0c10 55%);
+    color:var(--ink);
+    font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+  }
+  .wrap{max-width:1100px; margin:22px auto; padding:0 14px; display:grid; gap:14px}
+  header{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px}
+  h1{margin:0; font-size:18px; font-weight:700; letter-spacing:.2px}
+  .header-actions{display:flex; gap:8px; align-items:center}
+  .grid{display:grid; grid-template-columns:1fr 320px; gap:14px}
+  @media (max-width: 900px){ .grid{ grid-template-columns:1fr } }
+  .card{background:var(--panel); border:1px solid #1a2236; border-radius:14px; padding:14px 14px 8px;
+        box-shadow:0 8px 24px #0006, inset 0 1px 0 #ffffff0a;}
+  canvas{width:100%; aspect-ratio:1.9/1; display:block;
+         background:conic-gradient(from 180deg at 50% 50%, #0b0c10, #0e111a, #0b0c10); border-radius:12px}
+  .legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
+  .tag{display:inline-flex; gap:6px; align-items:center; padding:5px 9px; border-radius:999px; background:#121826; border:1px solid #1a2236; color:#cfe1ff; font-size:12px}
+  .dot{width:10px; height:10px; border-radius:50%}
+  .controls{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+  .controls button, .header-actions button{background:#121826; border:1px solid #1a2236; color:#cfe1ff; border-radius:10px; padding:8px 12px; cursor:pointer; font-size:13px}
+  .controls button:hover, .header-actions button:hover{border-color:#2a3553; background:#151d2e}
+  .chip{padding:6px 10px;border-radius:999px;background:#11182c;border:1px solid #1a2236;color:#cfe1ff}
+  .chip b{color:#fff}
+  .kpiRow{display:flex; gap:10px; flex-wrap:wrap}
+  .log{height:300px; overflow:auto; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+       font-size:12px; background:#0b0f1b; border:1px solid #1a2236; border-radius:10px; padding:8px}
+  .menu{position:relative}
+  .menu > summary{list-style:none; cursor:pointer; display:inline-block; background:#121826; color:var(--ink);
+    border:1px solid #1a2236; padding:8px 12px; border-radius:10px; user-select:none}
+  .menu > summary::-webkit-details-marker{display:none}
+  .menu[open] > summary{border-color:#2a3553}
+  .menu > ul{position:absolute; right:0; top:38px; background:#0f1421; border:1px solid #1a2236; border-radius:10px; padding:6px; width:220px; z-index:20}
+  .menu > ul li{list-style:none}
+  .menu > ul button{width:100%; text-align:left; padding:8px 10px; background:transparent; border:0; color:#cfe1ff; border-radius:8px}
+  .menu > ul button:hover{background:#0c1325}
+  footer{opacity:.7; font-size:12px; padding:4px; text-align:center}
+  footer a{color:var(--accent); text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  
+  /* Modal styles */
+  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;padding:20px;backdrop-filter:blur(4px)}
+  .modal.active{display:flex;align-items:center;justify-content:center}
+  .modal-content{max-width:600px;width:100%;background:var(--panel);border:1px solid #1a2236;border-radius:14px;padding:24px;
+                 box-shadow:0 12px 48px rgba(0,0,0,0.5);max-height:90vh;overflow-y:auto}
+  .modal-content h2{margin:0 0 16px;font-size:20px;color:var(--ink)}
+  .modal-content h3{margin:16px 0 8px;font-size:16px;color:var(--accent)}
+  .modal-content p{margin:0 0 12px;line-height:1.6;color:var(--muted)}
+  .modal-content ul{margin:0 0 16px;padding-left:24px;line-height:1.8}
+  .modal-content ul li{margin-bottom:8px;color:var(--muted)}
+  .modal-content ul li strong{color:var(--ink)}
+  .modal-close{background:#121826;border:1px solid #1a2236;color:#cfe1ff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px}
+  .modal-close:hover{border-color:#2a3553;background:#151d2e}
+  
+  .toast{position:fixed;bottom:20px;right:20px;background:#121826;border:1px solid #1a2236;border-radius:10px;padding:12px 20px;
+         color:var(--ok);box-shadow:0 8px 24px rgba(0,0,0,0.4);opacity:0;transform:translateY(20px);transition:all 0.3s ease;z-index:200}
+  .toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>CombOS Swarm Demo — Hybrid Active HiveMind</h1>
+      <div class="header-actions">
+        <button id="btnInfo">ℹ️ About</button>
+        <button id="btnShare">🔗 Share</button>
+        <details class="menu">
+          <summary aria-haspopup="menu" aria-expanded="false">Actions ▾</summary>
+          <ul id="demo-menu" role="menu" aria-label="Actions">
+            <li><button data-act="anomaly">Inject Anomaly</button></li>
+            <li><button data-act="burst">Inject Burst (x5)</button></li>
+            <li><button data-act="repair">Vote: Repair Random</button></li>
+            <li><button data-act="reset">Reset Swarm</button></li>
+          </ul>
+        </details>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <canvas id="hex" width="1400" height="740"></canvas>
+        <div class="legend">
+          <span class="tag"><span class="dot" style="background:var(--queen)"></span>Queen</span>
+          <span class="tag"><span class="dot" style="background:var(--worker)"></span>Worker</span>
+          <span class="tag"><span class="dot" style="background:var(--sentinel)"></span>Sentinel</span>
+          <span class="tag"><span class="dot" style="background:var(--drone)"></span>Drone</span>
+          <span class="tag"><span class="dot" style="background:var(--halo)"></span>Anomaly / Silent</span>
+          <span class="tag"><span class="dot" style="background:var(--pulse)"></span>Pulse</span>
+        </div>
+        <div class="controls">
+          <button id="ctlInject">Inject Anomaly</button>
+          <button id="ctlBurst">Inject Burst (x5)</button>
+          <button id="ctlRepair">Vote: Repair Random</button>
+          <button id="ctlReset">Reset Swarm</button>
+        </div>
+        <div class="controls">
+          <span style="flex:1"></span>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;opacity:.9">Cinematic
+            <select id="cinMode" style="background:#121826;border:1px solid #1a2236;color:#cfe1ff;border-radius:8px;padding:6px 8px">
+              <option value="0" selected>Off</option>
+              <option value="1">On</option>
+            </select>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;opacity:.9">Auto Focus
+            <select id="focusMode" style="background:#121826;border:1px solid #1a2236;color:#cfe1ff;border-radius:8px;padding:6px 8px">
+              <option value="0">Off</option>
+              <option value="1" selected>On</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card" style="margin-bottom:12px">
+          <div class="kpiRow">
+            <div class="chip">Health: <b id="kHealth">OK</b></div>
+            <div class="chip">Consensus: <b id="kConsensus">Idle</b></div>
+          </div>
+          <div class="kpiRow" style="margin-top:8px">
+            <div class="chip">Latency: <b id="kLatency">—</b></div>
+            <div class="chip">FPS: <b id="kFPS">60</b></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:13px;color:#cfe1ff">Event Log</h3>
+            <button id="btnClear" style="background:#0c1325;border:1px solid #1a2236;color:#cfe1ff;border-radius:8px;padding:6px 8px">Clear</button>
+          </div>
+          <div id="log" class="log" aria-live="polite"></div>
+          <p style="opacity:.75;margin:8px 0 0">Tip: Healthy nodes pulse gently; anomalies glow red; repairs flash bright.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © Codex Hive Labs — CombOS Swarm Demo v0.3.1 (Hybrid) — 
+      <a href="https://github.com/voineagvalentin/combcore-kernel" target="_blank" rel="noopener">View on GitHub</a>
+    </footer>
+  </div>
+
+  <!-- About Modal -->
+  <div id="infoModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal-content" role="document">
+      <h2 id="modalTitle">🧬 About CombOS Swarm Demo</h2>
+      
+      <p><strong>What you're seeing:</strong> A bio-inspired distributed operating system with 50 nodes coordinating through pulse propagation and quorum voting — like a digital beehive.</p>
+      
+      <h3>🎯 Node Roles</h3>
+      <ul>
+        <li><strong>Queen (yellow, center):</strong> Global coordinator that issues repair leases and provides strategic hints during voting</li>
+        <li><strong>Workers (cyan):</strong> Task processing nodes that form the backbone of the swarm</li>
+        <li><strong>Sentinels (red):</strong> Security nodes with heightened voting caution for anomaly detection</li>
+        <li><strong>Drones (green):</strong> Override authority that can force repairs when consensus fails</li>
+      </ul>
+      
+      <h3>⚡ How It Works</h3>
+      <ul>
+        <li><strong>Pulse Propagation:</strong> Nodes send heartbeat pulses (visible as expanding rings) to coordinate state</li>
+        <li><strong>Quorum Voting:</strong> When anomalies occur, the swarm votes democratically on repairs</li>
+        <li><strong>Self-Healing:</strong> Local patches happen instantly; complex repairs use distributed consensus</li>
+        <li><strong>No Central Control:</strong> Emergence and coordination arise from simple node-level rules</li>
+      </ul>
+      
+      <h3>🧪 Try This</h3>
+      <ul>
+        <li>Click "Inject Anomaly" and watch neighbors detect it immediately</li>
+        <li>Observe the voting process as nodes pulse during consensus</li>
+        <li>See the repair shimmer when healing completes</li>
+        <li>Try "Inject Burst (x5)" to stress-test concurrent repair handling</li>
+      </ul>
+      
+      <p><strong>Technical Foundation:</strong> This demo implements core CombOS primitives: hex-grid spatial addressing, pulse-based time synchronization, distributed consensus, and emergent self-repair. The same architecture scales to robotics swarms, edge AI coordination, and spatial computing interfaces.</p>
+      
+      <button class="modal-close" onclick="document.getElementById('infoModal').classList.remove('active')">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+<script>
+(function(){
+  // --- CONFIG ---
+  const HEARTBEAT_MS = 1000;   // base heartbeat period
+  const JITTER_MS = 120;       // slight per-node variance
+  const VOTE_TIMEOUT = 1500;   // quorum window
+  const MISS_BEATS = 2;        // missing beats => suspect
+  const QUEEN_EPOCH_MS = 3000; // global sweep
+  const SCOUT_MS = 500;        // patrol cadence
+
+  // --- COLORS ---
+  const colors = {
+    Queen:get('--queen'), Worker:get('--worker'), Sentinel:get('--sentinel'), Drone:get('--drone'),
+    Pulse:get('--pulse'), Halo:get('--halo'), Link:get('--link'), LinkActive:get('--linkActive')
+  };
+  function get(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+
+  // --- STATE ---
+  let nodes = [];
+  let vote = null;
+  let lastLatency = 0;
+  // camera/cinematic
+  let cam = {x:0, y:0, z:1, t:0};
+  let cinMode = 0; // 0 off, 1 on
+  let focusMode = 1; // 0 off, 1 on
+  // FPS tracking
+  let lastFrameTime = performance.now();
+  let fps = 60;
+
+  const repairQueue = new Set();
+  const hpRepairQueue = new Set();
+
+  // axial hex directions
+  const HEX_DIRS = [
+    {dq:+1, dr:0}, {dq:+1, dr:-1}, {dq:0, dr:-1},
+    {dq:-1, dr:0}, {dq:-1, dr:+1}, {dq:0, dr:+1}
+  ];
+
+  // --- UTIL ---
+  function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function choice(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+  function roleColor(role){ return role==='Queen'?colors.Queen:role==='Worker'?colors.Worker:role==='Sentinel'?colors.Sentinel:colors.Drone; }
+
+  // --- TOAST ---
+  function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'), 2500);
+  }
+
+  // --- LOG ---
+  const logEl = document.getElementById('log');
+  function log(msg){
+    const time = new Date().toLocaleTimeString();
+    const line = document.createElement('div');
+    line.textContent = `[${time}] ${msg}`;
+    logEl.prepend(line);
+    while(logEl.childNodes.length>160) logEl.lastChild.remove();
+  }
+
+  // --- NODES ---
+  function mkNode(q,r,role){
+    return {
+      id:nodes.length, q, r, role,
+      adapter:null,
+      alive:true,
+      anomaly:false, severity:0,
+      firstAnomalyTs:0,
+      repairAttempts:0,
+      lastBeatTs:performance.now(),
+      pulse:0,
+      healing:false,
+      underRepair:false,
+      leasedUntil:0,
+      queenHint:false,
+      hbTimer:null
+    };
+  }
+
+  function axialDist(a,b){
+    const x1=a.q, z1=a.r, y1=-x1-z1;
+    const x2=b.q, z2=b.r, y2=-x2-z2;
+    return Math.max(Math.abs(x1-x2), Math.abs(y1-y2), Math.abs(z1-z2));
+  }
+
+  function neighborsOf(id){
+    const n = nodes[id]; if(!n) return [];
+    const out=[];
+    for(const d of HEX_DIRS){
+      const q=n.q+d.dq, r=n.r+d.dr;
+      const m = nodes.find(x=>x.q===q && x.r===r);
+      if(m) out.push(m.id);
+    }
+    return out;
+  }
+
+  function initNodes(){
+    nodes = [];
+    // Expanded hex grid: rings 0-3 (50 nodes total)
+    const coords = [
+      // Ring 0 (center)
+      [0,0],
+      // Ring 1 (6 nodes)
+      [1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1],
+      // Ring 2 (12 nodes)
+      [2,0],[2,-1],[1,-2],[0,-2],[-1,-1],[-2,0],[-2,1],[-1,2],[0,2],[1,1],[2,1],[1,2],
+      // Ring 3 (18 nodes)
+      [3,0],[3,-1],[3,-2],[2,-3],[1,-3],[0,-3],[-1,-2],[-2,-1],[-3,0],[-3,1],[-3,2],[-2,3],[-1,3],[0,3],[1,2],[2,2],[3,1],[2,1],
+      // Additional ring 3 nodes to reach 50
+      [3,-3],[2,-2],[-1,-3],[-2,-2],[-3,-1],[-3,3],[-2,2],[1,3],[2,3],[3,2],[3,3],[-3,-3],[-3,-2]
+    ];
+    coords.forEach(([q,r],i)=>{
+      let role = 'Worker';
+      if(i===0) role='Queen';
+      // Sentinels: strategic positions at ring 2 corners
+      else if([8,11,14,17].includes(i)) role='Sentinel';
+      // Drones: outer ring positions
+      else if([20,26,32,38,44].includes(i)) role='Drone';
+      const n = mkNode(q,r,role);
+      n.hbTimer = setInterval(()=>heartbeatSend(n.id), HEARTBEAT_MS + rand(-JITTER_MS,JITTER_MS));
+      nodes.push(n);
+    });
+    repairQueue.clear(); hpRepairQueue.clear();
+  }
+
+  // --- HEARTBEATS (visual + logical) ---
+  function heartbeatSend(id){
+    const n = nodes[id]; if(!n || !n.alive) return;
+    const start = performance.now();
+    // simulate network delay a bit
+    setTimeout(()=>{
+      const now = performance.now();
+      lastLatency = Math.round(now - start);
+      // logical beat
+      n.lastBeatTs = now;
+      // visual pulse baseline to keep grid feeling alive
+      n.pulse = 1;
+      // sick nodes amplify pulse & color handled in draw()
+    }, rand(8, 40));
+  }
+
+  // --- QUEUES ---
+  function enqueueRepairHighPriority(id){
+    if(id==null || id===0) return;
+    hpRepairQueue.add(id);
+    maybeStartNextVote();
+  }
+  function enqueueRepair(id){
+    if(id==null || id===0) return;
+    repairQueue.add(id);
+    maybeStartNextVote();
+  }
+
+  function maybeStartNextVote(){
+    if(vote) return;
+    const now = performance.now();
+    const getAge = (id)=>{
+      const n = nodes[id]; if(!n) return 0;
+      const a = n.firstAnomalyTs ? (now - n.firstAnomalyTs) : 0;
+      const miss = n.lastBeatTs ? (now - n.lastBeatTs) : 0;
+      return Math.max(a, miss);
+    };
+    function pick(set){
+      let best=null, bestAge=-1;
+      for(const id of set.values()){
+        const age = getAge(id);
+        if(age>bestAge){ bestAge=age; best=id; }
+      }
+      if(best!=null) set.delete(best);
+      return best;
+    }
+    let id = pick(hpRepairQueue);
+    if(id==null) id = pick(repairQueue);
+    if(id!=null){
+      startVote({type:'repair', target:id, priority:'high'});
+    }
+  }
+
+  // --- ANOMALIES ---
+  function injectAnomaly(){
+    const idx = rand(1, nodes.length-1);
+    const sev = choice([1,2,3]);
+    const n = nodes[idx];
+    n.anomaly = true; n.severity = sev; n.firstAnomalyTs = performance.now(); n.repairAttempts = 0;
+    log(`⚠️ Anomaly detected at node ${idx} (sev ${sev}).`);
+    const neigh = neighborsOf(idx);
+    if(neigh.length) log(`🤝 Neighbors [${neigh.join(', ')}] signaled assist for node ${idx}.`);
+    enqueueRepairHighPriority(idx);
+  }
+
+  // --- LOCAL PATCH (micro-quorum) ---
+  function healthyNeighborsCount(id){
+    return neighborsOf(id).filter(nid => nodes[nid] && !nodes[nid].anomaly).length;
+  }
+  function maybeLocalPatch(id){
+    const n = nodes[id]; if(!n || !n.anomaly) return false;
+    const sev = n.severity || 2;
+    const need = (sev===1?2:(sev===2?3:99));
+    const hn = healthyNeighborsCount(id);
+    if(hn >= need){
+      n.anomaly = false; n.severity = 0; n.underRepair=false;
+      n.healing=true; setTimeout(()=>{n.healing=false}, 900);
+      hpRepairQueue.delete(id); repairQueue.delete(id);
+      log(`🧩 Local patch: neighbors [${neighborsOf(id).join(', ')}] stabilized node ${id} (sev ${sev}).`);
+      return true;
+    }
+    return false;
+  }
+
+  // --- DRONE OVERRIDE ---
+  function droneOverrideRepair(id, reason='override'){
+    const n = nodes[id]; if(!n || !n.anomaly) return false;
+    n.anomaly=false; n.severity=0; n.firstAnomalyTs=0; n.repairAttempts=0; n.underRepair=false;
+    n.healing=true; setTimeout(()=>{n.healing=false}, 900); n.pulse=1;
+    hpRepairQueue.delete(id); repairQueue.delete(id);
+    log(`🛠️ Drone override repaired node ${id} (${reason}).`);
+    return true;
+  }
+
+  // --- VOTING ---
+  function startVote(topic){
+    if(vote){ log("Vote already in progress."); return; }
+    vote = { topic, yes:0, no:0, startedAt: performance.now() };
+    log(`🗳️ Vote started: ${JSON.stringify(topic)}`);
+
+    if(topic.type==='repair' && typeof topic.target==='number'){
+      const t = nodes[topic.target];
+      if(t){ t.underRepair = true; t.pulse = 1; }
+      const neigh = neighborsOf(topic.target);
+      neigh.forEach(nid => { if(nodes[nid]) nodes[nid].pulse = 0.6; });
+    }
+
+    nodes.forEach((n,i)=>{
+      const delay = rand(40,320);
+      setTimeout(()=>{
+        let tendency=0.5;
+        if(vote.topic.type==='repair'){
+          const target = nodes[vote.topic.target];
+          const base = (n.role==='Sentinel') ? 0.75 : 0.55;
+          const healthy = neighborsOf(vote.topic.target).filter(id => nodes[id] && !nodes[id].anomaly).length;
+          const neighborBias = Math.min(1, healthy*0.20);
+          const queenBias = (target && target.queenHint) ? 0.25 : 0;
+          const prioBias = (vote.topic.priority==='high') ? 0.10 : 0;
+          tendency = Math.min(0.97, base + neighborBias + queenBias + prioBias);
+        } else if(vote.topic.type==='assign'){
+          tendency = (n.role==='Queen') ? 0.80 : 0.60;
+        }
+        const v = Math.random() < tendency ? 'yes':'no';
+        vote[v]++; n.pulse = 1;
+      }, delay + i*8);
+    });
+
+    const timeout = topic.priority==='high' ? Math.round(VOTE_TIMEOUT*0.7) : VOTE_TIMEOUT;
+    setTimeout(resolveVote, timeout);
+  }
+
+  function resolveVote(){
+    if(!vote) return;
+    const duration = Math.round(performance.now() - vote.startedAt);
+    const {topic} = vote;
+    const approved = vote.yes >= vote.no;
+    log(`✅ Vote ${approved? 'APPROVED':'REJECTED'}: yes=${vote.yes}, no=${vote.no} in ${duration}ms.`);
+    if(topic.type==='repair'){
+      const tgt = nodes[topic.target];
+      if(approved){
+        if(tgt){
+          tgt.anomaly=false; tgt.severity=0; tgt.firstAnomalyTs=0; tgt.repairAttempts=0;
+          tgt.underRepair=false; tgt.healing=true; setTimeout(()=>{tgt.healing=false}, 900);
+          log(`🔧 Node ${tgt.id} repaired.`);
+        }
+      } else {
+        if(tgt){ tgt.repairAttempts = (tgt.repairAttempts||0)+1; }
+        if(tgt && tgt.repairAttempts>=2){
+          droneOverrideRepair(tgt.id, 'two rejections');
+        } else if(tgt){
+          enqueueRepairHighPriority(tgt.id);
+        }
+      }
+    }
+    if(topic.type==='repair' && nodes[topic.target]){ nodes[topic.target].underRepair=false; }
+
+    vote = null;
+    maybeStartNextVote();
+  }
+
+  // --- CONTINUOUS AUDIT + SCOUTS + QUEEN ---
+  function continuousAudit(){
+    const now = performance.now();
+    const missThresh = HEARTBEAT_MS*MISS_BEATS + JITTER_MS;
+    for(const n of nodes){
+      if(n.id===0) continue;
+      const isSilent = (now - (n.lastBeatTs||0)) > missThresh;
+      if(isSilent && !n.healing){
+        if(!n.anomaly){
+          n.anomaly = true; n.severity = Math.max(2, n.severity||2);
+          if(!n.firstAnomalyTs) n.firstAnomalyTs = now;
+          log(`🔇 Missing heartbeat for node ${n.id} — enqueueing check.`);
+        }
+        enqueueRepairHighPriority(n.id);
+      }
+      if(n.anomaly){
+        if(!maybeLocalPatch(n.id)){
+          const age = (n.firstAnomalyTs? (now-n.firstAnomalyTs):0);
+          if(age > 4000){ droneOverrideRepair(n.id, 'aged'); }
+          else enqueueRepairHighPriority(n.id);
+        }
+      }
+    }
+    setTimeout(continuousAudit, 500);
+  }
+
+  function scoutPatrol(){
+    const tries = 4;
+    for(let i=0;i<tries;i++){
+      const id = rand(1, nodes.length-1);
+      const n = nodes[id]; if(!n || n.healing) continue;
+      const missThresh = HEARTBEAT_MS*MISS_BEATS + JITTER_MS;
+      const isSilent = (performance.now() - (n.lastBeatTs||0)) > missThresh;
+      if(n.anomaly || isSilent) enqueueRepairHighPriority(id);
+    }
+    setTimeout(scoutPatrol, SCOUT_MS);
+  }
+
+  function queenEpoch(){
+    const now = performance.now();
+    const T1 = 2000, T2 = 4000;
+    nodes.forEach(n=> n.queenHint=false);
+    for(const n of nodes){
+      if(n.id===0) continue;
+      const missThresh = HEARTBEAT_MS*MISS_BEATS + JITTER_MS;
+      const beatAge = now - (n.lastBeatTs||0);
+      const isSilent = beatAge > missThresh;
+      const hasProblem = n.anomaly || isSilent;
+      if(!hasProblem || n.healing) continue;
+      if(now > (n.leasedUntil||0)){
+        n.leasedUntil = now + 2500;
+        enqueueRepairHighPriority(n.id);
+        log(`👑 Queen lease issued for node ${n.id}.`);
+      }
+      const aAge = n.firstAnomalyTs ? (now - n.firstAnomalyTs) : beatAge;
+      if(aAge > T1){ n.queenHint = true; }
+      if(aAge > T2){ droneOverrideRepair(n.id, 'queen override'); }
+    }
+    setTimeout(queenEpoch, QUEEN_EPOCH_MS);
+  }
+
+  // --- RENDERING ---
+  const canvas = document.getElementById('hex');
+  const ctx = canvas.getContext('2d', {alpha:true});
+  const kHealth = document.getElementById('kHealth');
+  const kCons = document.getElementById('kConsensus');
+  const kLat = document.getElementById('kLatency');
+  const kFPS = document.getElementById('kFPS');
+
+  function resizeCanvas(){
+    const pr = Math.min(2, window.devicePixelRatio||1);
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if(canvas.width !== Math.floor(w*pr) || canvas.height !== Math.floor(h*pr)){
+      canvas.width = Math.floor(w*pr); canvas.height = Math.floor(h*pr);
+      ctx.setTransform(pr,0,0,pr,0,0);
+    }
+  }
+
+  function axialToPixel(q,r,size,origin){
+    const x = size * (Math.sqrt(3)*q + Math.sqrt(3)/2*r);
+    const y = size * (3/2 * r);
+    return [origin.x + x, origin.y + y];
+  }
+
+  function activeCentroid(size, origin){
+    const act = nodes.filter(n=> n.anomaly || n.underRepair || n.healing);
+    if(!act.length) return [origin.x, origin.y];
+    let sx=0, sy=0;
+    for(const n of act){
+      const [x,y] = axialToPixel(n.q,n.r,size,origin);
+      sx+=x; sy+=y;
+    }
+    return [sx/act.length, sy/act.length];
+  }
+
+  function linkNeighbors(size,origin,alpha=0.12){
+    ctx.beginPath();
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        if(axialDist(a,b)===1){
+          const [x1,y1]=axialToPixel(a.q,a.r,size,origin);
+          const [x2,y2]=axialToPixel(b.q,b.r,size,origin);
+          ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+        }
+      }
+    }
+    ctx.strokeStyle = colors.Link;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = alpha;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function draw(){
+    function lerp(a,b,t){ return a + (b-a)*t; }
+
+    function applyCamera(size, origin){
+      // Determine target center
+      const [cx, cy] = (focusMode? activeCentroid(size, origin) : [origin.x, origin.y]);
+      // Animate zoom/pan
+      const tNow = performance.now()*0.001;
+      cam.t += 0.016;
+      const targetZ = (cinMode? (1.02 + 0.03*Math.sin(tNow*0.25)) : 1);
+      cam.z = lerp(cam.z, targetZ, 0.04);
+      cam.x = lerp(cam.x, cx, 0.08);
+      cam.y = lerp(cam.y, cy, 0.08);
+
+      // center then scale around cam center
+      ctx.translate((origin.x - cam.x), (origin.y - cam.y));
+      ctx.translate(cam.x, cam.y);
+      ctx.scale(cam.z, cam.z);
+      ctx.translate(-cam.x, -cam.y);
+    }
+
+    // FPS calculation
+    const now = performance.now();
+    const delta = now - lastFrameTime;
+    fps = Math.round(1000/delta);
+    kFPS.textContent = fps;
+    lastFrameTime = now;
+
+    resizeCanvas();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const {width:w,height:h} = canvas;
+    const size = Math.min(w,h)/16;  // Adjusted for 50 nodes (3 rings + center)
+    const origin = {x:w/2, y:h/2};
+
+    ctx.save();
+    applyCamera(size, origin);
+    linkNeighbors(size,origin,0.14);
+
+    const blink = (Math.sin((now)/220)+1)/2;
+
+    nodes.forEach(n=>{
+      const [x,y] = axialToPixel(n.q,n.r,size,origin);
+      const R = Math.min(26, Math.max(14, size*0.95));
+
+      // pulse ring (baseline heartbeat visual)
+      if(n.pulse>0){
+        const p=n.pulse;
+        ctx.beginPath();
+        ctx.arc(x,y,R + p*18, 0, Math.PI*2);
+        ctx.strokeStyle = colors.Pulse;
+        ctx.lineWidth = 2 - (p*1.6);
+        ctx.stroke();
+        n.pulse = Math.max(0, n.pulse - 0.04);
+      }
+
+      // base node
+      ctx.beginPath();
+      ctx.arc(x,y,R*0.62, 0, Math.PI*2);
+      ctx.fillStyle = roleColor(n.role);
+      ctx.fill();
+
+      // anomaly halo / silent indicator
+      const missThresh = HEARTBEAT_MS*MISS_BEATS + JITTER_MS;
+      const isSilent = (now - (n.lastBeatTs||0)) > missThresh;
+      if(n.anomaly || isSilent){
+        const sev = n.severity || 1;
+        ctx.beginPath();
+        ctx.arc(x,y,R*0.82, 0, Math.PI*2);
+        const alpha = 0.45 + 0.18*sev + (sev>=3 ? 0.10*blink : 0);
+        ctx.strokeStyle = `rgba(255,90,90,${Math.min(0.95,alpha)})`;
+        ctx.lineWidth = 2 + sev;
+        ctx.stroke();
+      }
+
+      // healing shimmer
+      if(n.healing){
+        ctx.beginPath();
+        ctx.arc(x,y,R*0.90, 0, Math.PI*2);
+        ctx.strokeStyle = 'rgba(160,220,255,0.35)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // id text
+      ctx.fillStyle = '#0b0c10';
+      ctx.font = '600 12px ui-monospace,Consolas,Menlo,monospace';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(n.id, x, y);
+    });
+
+    ctx.restore();
+
+    // cinematic vignette (subtle)
+    if(cinMode){
+      const grad = ctx.createRadialGradient(w/2,h/2, Math.min(w,h)*0.3, w/2,h/2, Math.max(w,h)*0.8);
+      grad.addColorStop(0,'rgba(0,0,0,0)');
+      grad.addColorStop(1,'rgba(0,0,0,0.25)');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    }
+
+    // KPIs
+    const anyAnom = nodes.some(n=>n.anomaly);
+    kHealth.textContent = anyAnom ? 'DEGRADED' : 'OK';
+    kHealth.style.color = anyAnom ? 'var(--warn)' : 'var(--ok)';
+    const queued = hpRepairQueue.size + repairQueue.size;
+    kCons.textContent = vote ? `Voting: ${vote.topic.type}${vote.topic.priority==='high'?' (prio)':''}` : (queued ? `Queued repairs: ${queued}` : 'Idle');
+    kLat.textContent = lastLatency ? String(lastLatency) + 'ms' : '—';
+
+    requestAnimationFrame(draw);
+  }
+
+  // --- UI ---
+  document.getElementById('btnClear').onclick = ()=>{ logEl.innerHTML=''; };
+  
+  // Modal controls
+  document.getElementById('btnInfo').onclick = ()=> {
+    document.getElementById('infoModal').classList.add('active');
+  };
+  
+  document.getElementById('infoModal').onclick = (e)=> {
+    if(e.target.id === 'infoModal'){
+      document.getElementById('infoModal').classList.remove('active');
+    }
+  };
+  
+  // Share functionality
+  document.getElementById('btnShare').onclick = ()=> {
+    const url = window.location.href;
+    if(navigator.share){
+      navigator.share({
+        title: 'CombOS Swarm Demo',
+        text: 'Check out this bio-inspired distributed operating system demo!',
+        url: url
+      }).catch(()=>{
+        fallbackCopy(url);
+      });
+    } else {
+      fallbackCopy(url);
+    }
+  };
+  
+  function fallbackCopy(text){
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(text).then(()=>{
+        showToast('🔗 Demo link copied to clipboard!');
+      });
+    } else {
+      showToast('🔗 Link: ' + text);
+    }
+  }
+  
+  function wireControls(){
+    const gi=(id)=>document.getElementById(id);
+    gi('ctlInject').onclick = ()=> injectAnomaly();
+    gi('ctlBurst').onclick = ()=> { for(let i=0;i<5;i++) setTimeout(injectAnomaly, i*60); };
+    gi('ctlRepair').onclick = ()=> enqueueRepairHighPriority(rand(1,nodes.length-1));
+    gi('ctlReset').onclick = ()=> { nodes.forEach(n=> clearInterval(n.hbTimer)); init(); };
+    // cinematic toggles
+    gi('cinMode').onchange = (e)=>{ cinMode = Number(e.target.value||0); };
+    gi('focusMode').onchange = (e)=>{ focusMode = Number(e.target.value||0); };
+  }
+  
+  document.querySelector('.menu').addEventListener('click',(e)=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    const a = btn.dataset.act;
+    if(a==='anomaly') injectAnomaly();
+    if(a==='burst') for(let i=0;i<5;i++) setTimeout(injectAnomaly, i*60);
+    if(a==='repair') enqueueRepairHighPriority(rand(1,nodes.length-1));
+    if(a==='reset'){ nodes.forEach(n=> clearInterval(n.hbTimer)); init(); }
+    btn.closest('.menu').removeAttribute('open');
+    document.querySelector('.menu > summary').setAttribute('aria-expanded','false');
+  });
+  
+  document.addEventListener('keydown', (e)=>{
+    const menu = document.querySelector('.menu[open]');
+    if(menu && e.key==='Escape'){
+      menu.removeAttribute('open');
+      document.querySelector('.menu > summary').setAttribute('aria-expanded','false');
+    }
+    const modal = document.getElementById('infoModal');
+    if(modal.classList.contains('active') && e.key==='Escape'){
+      modal.classList.remove('active');
+    }
+  });
+  
+  document.querySelector('.menu').addEventListener('toggle', (e)=>{
+    const open = e.target.hasAttribute('open');
+    document.querySelector('.menu > summary').setAttribute('aria-expanded', String(open));
+  });
+
+  // --- BOOT ---
+  function init(){
+    nodes.forEach(n=> n.hbTimer && clearInterval(n.hbTimer));
+    initNodes();
+    // prime a beat for everyone so they show immediately
+    nodes.forEach((_,i)=> heartbeatSend(i));
+  }
+
+  init();
+  wireControls();
+  draw();
+  continuousAudit();
+  scoutPatrol();
+  queenEpoch();
+})();
+</script>
+</body>
+</html>

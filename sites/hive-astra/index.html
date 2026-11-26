@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#090c12"/>
+<meta name="description" content="Hive Astra — an interactive solar system and live space science workbench by Codex Hive Labs."/>
+<title>Hive Astra · by Codex Hive Labs</title>
+<link rel="icon" type="image/png" href="assets/icon.png"/>
+<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="observatory.css"/>
+<link rel="stylesheet" href="lessons.css"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW4D6JPPB4"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DW4D6JPPB4');</script>
+</head>
+<body>
+<!-- chl-bc -->
+<style id="chl-bc">
+:root{--chl-nav-h:calc(52px + env(safe-area-inset-top,0px))}
+.bc,.bc *{box-sizing:border-box}
+.bc__badge{display:inline-block;font:700 10px/1 "Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(180deg,#e2b768,#c99a4b);color:#16130d;padding:5px 9px;border-radius:999px;flex:none}
+.bc{position:sticky;top:0;z-index:40;background:#141414;border-bottom:1px solid rgba(224,165,38,.42);padding-top:env(safe-area-inset-top,0px);color:#e9e6df;-webkit-text-size-adjust:100%;overflow:hidden}
+.bc__in{max-width:1800px;margin:0 auto;padding:0 26px;height:52px;display:flex;align-items:center;gap:12px;min-width:0}
+.bc__list{display:flex;align-items:center;min-width:0;flex:1;list-style:none;margin:0;padding:0;font:650 15px/1.2 "Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;white-space:nowrap}
+.bc__item{display:flex;align-items:center;min-width:0;flex:none}
+.bc__item+.bc__item::before{content:"›";content:"›"/"";color:#8f8778;font-size:20px;line-height:1;margin:0 10px;flex:none}
+.bc__item a,.bc__item span.cur{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:#e0a526;text-decoration:none;border-radius:6px;padding:0 2px}
+.bc__item a:hover{color:#ffd36b;text-decoration:underline;text-underline-offset:4px}
+.bc__item [aria-current="page"],.bc__item span.cur{color:#f3f0ea}
+.bc__item a[aria-current="page"]:hover{color:#fff}
+.bc__item a:focus-visible{outline:2px solid #e0a526;outline-offset:2px}
+.bc__item--home a{color:#f3f0ea}
+.bc__item--home img{height:28px;width:auto;display:block;max-width:none}
+.bc__labs{color:#e0a526}
+.bc__dots{display:none}
+.bc__item--module,.bc__item--extra{flex:0 1 auto}
+.bc__item--module a,.bc__item--extra a,.bc__item--extra span.cur{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:44px}
+.bc__item--extra:last-child{flex-shrink:1;min-width:3em}
+.bc__item--module{flex-shrink:3;min-width:2.5em}
+@media (max-width:560px){
+  .bc__in{padding:0 12px;gap:8px}
+  .bc__list{font-size:14px}
+  .bc__item+.bc__item::before{margin:0 6px}
+  .bc__item--home .bc__t{display:none}
+  .bc--deep .bc__item--academy .bc__t{display:none}
+  .bc--deep .bc__item--academy .bc__dots{display:inline;padding:0 6px;font-size:18px}
+  .bc--deep .bc__badge{display:none}
+  .bc__badge{font-size:9px;padding:4px 7px;letter-spacing:.12em}
+  .bc__item--module{flex-shrink:0}
+  .bc__item--academy{flex:0 1 auto;min-width:2.2em}
+  .bc__item--academy a{min-width:0;overflow:hidden}
+  .bc__item--academy .bc__t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .bc--deep .bc__item--module{flex-shrink:0}
+  .bc--deeper .bc__item--module{display:none}
+}
+</style>
+<nav class="bc" aria-label="Breadcrumb">
+  <div class="bc__in">
+    <ol class="bc__list" id="bc">
+      <li class="bc__item bc__item--home"><a href="https://codex-hive.com" aria-label="Codex Hive Labs, codex-hive.com"><picture><source type="image/webp" srcset="/chl-assets/codex-hive-mark-1x.webp 1x, /chl-assets/codex-hive-mark-2x.webp 2x, /chl-assets/codex-hive-mark-3x.webp 3x"><img src="/chl-assets/codex-hive-mark-1x.png" srcset="/chl-assets/codex-hive-mark-1x.png 1x, /chl-assets/codex-hive-mark-2x.png 2x, /chl-assets/codex-hive-mark-3x.png 3x" width="26" height="32" alt="" decoding="async"></picture><span class="bc__t">Codex Hive <span class="bc__labs">Labs</span></span></a></li>
+      <li class="bc__item bc__item--academy"><a href="https://academy.codex-hive.com/" aria-label="Hive Academy"><span class="bc__t">Hive Academy</span><span class="bc__dots" aria-hidden="true">…</span></a></li>
+      <li class="bc__item bc__item--module"><a href="https://astra.codex-hive.com/" aria-current="page">Hive Astra</a></li>
+    </ol>
+    
+  </div>
+</nav>
+<!-- /chl-bc -->
+
+<div class="hex-sky" aria-hidden="true"></div>
+<div id="app">
+  <header class="site-header">
+    <div class="brand-stack" role="banner">
+      <div class="brand-mark"><img src="assets/icon.png" alt=""/></div>
+      <div class="brand-title"><div class="brand-line"><span class="brand-hive">HIVE</span> <span class="brand-astra">ASTRA</span><span class="brand-spark">✦</span></div><div class="brand-caption">A HIVE ACADEMY EXPERIENCE</div></div>
+    </div>
+    <div class="head-center"><span class="badge-soft"><span class="status-dot" id="connectionDot"></span><span id="connectionLabel">CONNECTING TO TELEMETRY</span></span><span class="head-divider"></span><span id="utcClock">— UTC</span></div>
+    <div class="head-right"><button class="small-icon" id="themeButton" title="Toggle high-contrast mode" aria-label="Toggle high contrast">◐</button><button class="header-outline" id="sourcesButton">SOURCES <span aria-hidden="true">↗</span></button></div>
+  </header>
+  <nav class="top-tabs" aria-label="Primary navigation">
+    <button class="tab active" data-tab="explore"><span class="tab-icon">✦</span> Explore</button>
+    <button class="tab" data-tab="signals"><span class="tab-icon">⌁</span> Live signals <span class="mini-live-dot"></span></button>
+    <button class="tab" data-tab="missions"><span class="tab-icon">◈</span> Missions</button>
+    <button class="tab" data-tab="learn"><span class="tab-icon">◇</span> Hive Academy</button>
+    <button class="tab" data-tab="about"><span class="tab-icon">◎</span> About</button>
+    <span class="tab-spacer"></span><span class="navigation-hint">INTERACTIVE SOLAR SYSTEM · SCIENTIFIC DATA WORKBENCH</span>
+  </nav>
+
+  <main class="main-layout" id="explorePanel">
+    <aside class="left-panel glass-panel">
+      <div class="eyebrow">CELESTIAL NAVIGATOR <span class="gold-plus">✳</span></div>
+      <label class="search-wrap" for="bodySearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg><input id="bodySearch" type="search" placeholder="Find a celestial body…" autocomplete="off"/><kbd>/</kbd></label>
+      <div class="panel-label-row"><span>OBJECT DIRECTORY</span><span class="tiny-pill">10 OBJECTS</span></div>
+      <div id="bodyList" class="body-list" role="listbox" aria-label="Solar system objects"></div>
+      <div class="left-footer">
+        <div class="eyebrow">OBSERVING FROM</div>
+        <button class="location-button" id="locationButton"><span class="location-glyph">◎</span><span><strong id="locationName">Your sky</strong><small id="locationSub">Default location · 40°N, 100°W · Change</small></span><span class="edit-glyph">✎</span></button>
+        <div class="left-status"><span>●</span> Orbital visualization is illustrative</div>
+      </div>
+    </aside>
+
+    <section class="scene-column">
+      <div class="scene-panel glass-panel" id="scenePanel">
+        <canvas id="orrery" aria-label="Interactive projected 3D solar system. Drag to rotate; scroll to zoom. Select a body using the left list or click a planet."></canvas>
+        <div class="scene-vignette" aria-hidden="true"></div>
+        <div class="scene-topline"><div><div class="eyebrow gold">THE HIVE OBSERVATORY</div><h1>Explore the <em>extraordinary.</em></h1><div class="subheading">The solar system, a new perspective.</div></div><span class="scene-badge"><i></i> INTERACTIVE MODEL</span></div>
+        <div class="scene-mousehint"><span>✥</span> DRAG TO ORBIT <span class="sep">/</span> SCROLL TO ZOOM <span class="sep">/</span> CLICK TO EXPLORE</div>
+        <div id="sceneLabels" aria-hidden="true"></div>
+        <div class="scene-controls"><button id="zoomIn" aria-label="Zoom in" title="Zoom in">+</button><button id="zoomOut" aria-label="Zoom out" title="Zoom out">−</button><span></span><button id="resetView" aria-label="Reset camera" title="Reset camera">⌖</button><button id="pauseMotion" aria-label="Pause animation" title="Pause animation">Ⅱ</button></div>
+        <div class="scene-legend"><span><i class="legend-gold"></i> INNER SOLAR SYSTEM</span><span><i class="legend-blue"></i> OUTER SOLAR SYSTEM</span></div>
+        <div class="scene-modelnote">POSITIONS: APPROXIMATE · DISTANCES &amp; SIZES NOT TO SCALE</div>
+      </div>
+      <div class="time-bar glass-panel"><div class="time-logo">◴</div><div class="time-copy"><div class="time-header">TIME EXPLORER <span class="timemeta">approximate orbital motion</span></div><div id="displayDate" class="time-date">November 15, 2026</div></div><input type="range" min="-365" max="365" step="1" value="0" id="timeRange" aria-label="Move orbital date backward or forward one year"/><button id="todayButton" class="today-button">TODAY ↺</button></div>
+      <div class="bottom-kpis">
+        <div class="metric-card glass-panel" id="kpiSolar"><div class="metric-icon amber-icon">☼</div><div><span class="metric-label">SOLAR ACTIVITY</span><strong id="kpiFlares">—</strong><small id="solarDetail">Awaiting NASA DONKI</small></div></div>
+        <div class="metric-card glass-panel" id="kpiKp"><div class="metric-icon violet-icon">≋</div><div><span class="metric-label">GEOMAGNETIC Kp</span><strong id="kpiKpValue">—</strong><small id="kpDetail">Awaiting NOAA SWPC</small></div></div>
+        <div class="metric-card glass-panel" id="kpiQuakes"><div class="metric-icon blue-icon">⌁</div><div><span class="metric-label">EARTHQUAKES M2.5+</span><strong id="kpiQuakesValue">—</strong><small id="quakeDetail">Awaiting USGS</small></div></div>
+      </div>
+    </section>
+
+    <aside class="right-panel glass-panel" id="inspectorPanel">
+      <div class="inspector-heading"><div class="eyebrow">OBJECT INSPECTOR <span class="panel-number">/ 01</span></div><button id="refreshButton" class="small-refresh" title="Refresh observations" aria-label="Refresh observations">↻</button></div>
+      <div class="feature-planet" id="featurePlanet"><div class="planet-aura"></div><div id="featureGlobe" class="feature-globe sun"></div><canvas id="featureCanvas" aria-hidden="true"></canvas></div>
+      <div class="object-title-row"><div><div class="eyebrow gold" id="objectKind">G2V · YELLOW DWARF</div><h2 id="objectName">The Sun</h2></div><div class="object-icon" id="objectGlyph">☼</div></div>
+      <p class="object-description" id="objectDescription">The star at the center of our solar system, driving the solar wind and space weather throughout the heliosphere.</p>
+      <div class="measure-grid"><div><span>MEAN DISTANCE</span><strong id="distanceValue">0 AU</strong></div><div><span>DIAMETER</span><strong id="diameterValue">1.39M km</strong></div></div>
+      <section class="epic-block hidden" id="epicBlock" aria-label="NASA EPIC real image sequence">
+        <div class="epic-head"><span class="eyebrow gold">NASA EPIC · REAL IMAGES</span><div class="epic-buttons"><button data-epic-mode="globe" class="active" title="EPIC photos re-projected onto the globe">GLOBE</button><button data-epic-mode="disk" title="Original EPIC disk photos">ORIGINAL</button><button id="epicPlay" aria-label="Pause EPIC sequence" title="Play / pause">Ⅱ</button></div></div>
+        <div class="epic-stage"><canvas id="epicGlobe"></canvas><canvas id="epicDisk" class="hidden"></canvas><span id="epicStatus" class="epic-status">LOADING EPIC…</span></div>
+        <input type="range" id="epicScrub" min="0" max="11" step="1" value="0" aria-label="Step through EPIC frames"/>
+        <div class="epic-caption" id="epicCaption"><small>Loading the latest NASA EPIC image sequence…</small></div>
+      </section>
+      <div class="signal-title"><span>LIVE OBSERVATIONS</span><span class="live-label"><i></i><span id="panelStatus">DATA PENDING</span></span></div>
+      <div id="observationCards" class="observation-cards"></div>
+      <div class="right-end"><a id="sourceLink" href="https://science.nasa.gov/sun/" target="_blank" rel="noopener noreferrer">EXPLORE AT NASA <span>↗</span></a><div class="updated-at" id="dataTimestamp">Values are source-labeled and time-stamped</div></div>
+    </aside>
+  </main>
+
+  <section class="content-panel hidden obs" id="signalsPanel" aria-labelledby="sigTitle">
+    <div class="obs-head">
+      <div>
+        <div class="eyebrow gold">SPACE WEATHER · LIVE SIGNALS</div>
+        <h2 id="sigTitle">From the Sun to Earth, <em>right now.</em></h2>
+        <p>Every number on this page is pulled live from NOAA and NASA when the page loads. If a feed can't be reached, you'll see a dash, not a guess.</p>
+      </div>
+      <div class="obs-head-side">
+        <div class="scale-chips" id="scaleChips" aria-label="NOAA space weather scales, current">
+          <span class="scale-chip" data-scale="R"><b>R</b><span>—</span><small>Radio</small></span>
+          <span class="scale-chip" data-scale="S"><b>S</b><span>—</span><small>Radiation</small></span>
+          <span class="scale-chip" data-scale="G"><b>G</b><span>—</span><small>Geomagnetic</small></span>
+        </div>
+        <div class="obs-updated"><span class="pulse" id="sigPulse"></span><span id="sigUpdated">Connecting to NOAA SWPC…</span><button class="obs-refresh" id="sigRefresh" type="button" aria-label="Refresh live data">↻</button></div>
+      </div>
+    </div>
+
+    <div class="obs-hero hex-frame" id="sunEarthHero">
+      <div class="hero-sun">
+        <img id="heroSun" src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" alt="Latest NASA SDO AIA 171 Ångström image of the Sun"/>
+        <span class="hero-tag live">LIVE IMAGE · NASA SDO</span>
+      </div>
+      <svg class="hero-stream" viewBox="0 0 800 300" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="streamG" x1="0" x2="1"><stop offset="0" stop-color="#ffcf6b" stop-opacity=".85"/><stop offset=".55" stop-color="#e0a526" stop-opacity=".35"/><stop offset="1" stop-color="#e0a526" stop-opacity="0"/></linearGradient>
+          <radialGradient id="cmeG" cx="0" cy=".5" r="1"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+        </defs>
+        <path d="M0,150 C200,40 520,60 800,128 L800,172 C520,240 200,260 0,150Z" fill="url(#streamG)" opacity=".55"/>
+        <path d="M30,150 C140,80 220,70 300,90 C260,130 260,170 300,210 C220,230 140,220 30,150Z" fill="url(#cmeG)" class="cme-puff"/>
+        <g class="stream-lines" stroke="#ffd27a" stroke-width="1.2" fill="none" opacity=".55">
+          <path d="M0,150 C240,90 520,100 800,140"/><path d="M0,150 C240,210 520,200 800,160"/><path d="M0,150 C260,125 520,130 800,150"/>
+        </g>
+        <g class="particles" fill="#ffe2a0"></g>
+      </svg>
+      <div class="hero-earth">
+        <div class="earth-wrap">
+          <img id="heroEarth" alt="Earth from NASA EPIC (DSCOVR)" />
+          <div class="aurora-ring" aria-hidden="true"></div>
+          <div class="magneto" aria-hidden="true"></div>
+        </div>
+        <span class="hero-tag" id="heroEarthTag">EARTH · NASA EPIC</span>
+      </div>
+      <div class="hero-callout c-wind"><small>SOLAR WIND AT L1</small><strong id="heroWind">—</strong><span id="heroWindSub">km/s · NOAA RTSW</span></div>
+      <div class="hero-callout c-imf"><small>MAGNETIC FIELD (IMF)</small><strong id="heroImf">—</strong><span id="heroImfSub">Bt / Bz · nT</span></div>
+      <div class="hero-callout c-kp"><small>GEOMAGNETIC Kp</small><strong id="heroKp">—</strong><span id="heroKpSub">NOAA estimated, 1-min</span></div>
+      <div class="hero-caption" id="heroCaption">Sun: latest NASA SDO/AIA 171 Å image (<a href="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" target="_blank" rel="noopener noreferrer">full image with capture time ↗</a>). Earth: NASA EPIC photo<span id="earthDate"></span>. The particle stream, CME glow and aurora ring are <b>illustration, not to scale</b>; the numbers are live.</div>
+    </div>
+
+    <div class="stat-row" id="statRow">
+      <article class="stat-card" id="statWind"><header><span class="stat-ico">≋</span><span>Solar wind speed</span></header><div class="stat-val"><b>—</b><small>km/s</small></div><div class="stat-note">Loading NOAA real-time solar wind…</div><svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none"></svg><footer>24 h · NOAA SWPC RTSW</footer></article>
+      <article class="stat-card" id="statKp"><header><span class="stat-ico">◎</span><span>Planetary Kp index</span></header><div class="stat-val"><b>—</b><small>/ 9</small></div><div class="stat-note">Loading NOAA Kp…</div><svg class="spark bars" viewBox="0 0 200 48" preserveAspectRatio="none"></svg><footer>7 days of 3-hour Kp · NOAA SWPC</footer></article>
+      <article class="stat-card" id="statProton"><header><span class="stat-ico">✳</span><span>Proton flux ≥10 MeV</span></header><div class="stat-val"><b>—</b><small>pfu</small></div><div class="stat-note">Loading GOES protons…</div><svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none"></svg><footer>24 h · GOES primary · S1 at 10 pfu</footer></article>
+      <article class="stat-card" id="statXray"><header><span class="stat-ico">☀</span><span>X-ray flare class</span></header><div class="stat-val"><b>—</b><small></small></div><div class="stat-note">Loading GOES X-rays…</div><svg class="spark" viewBox="0 0 200 48" preserveAspectRatio="none"></svg><footer>24 h · GOES 0.1–0.8 nm</footer></article>
+    </div>
+
+    <div class="obs-grid two">
+      <article class="obs-panel" id="xrayPanel">
+        <header class="panel-h"><div><div class="eyebrow">SOLAR X-RAY FLUX · LAST 24 HOURS</div><h3>Flare activity</h3></div><div class="legend"><span class="lg-long">0.1–0.8 nm</span><span class="lg-short">0.05–0.4 nm</span></div></header>
+        <div class="chart-wrap"><svg id="xrayChart" viewBox="0 0 760 300" preserveAspectRatio="none" role="img" aria-label="GOES X-ray flux, last 24 hours"></svg><div class="chart-empty" id="xrayEmpty">Loading GOES X-ray data…</div></div>
+        <footer class="panel-f"><span id="xrayStamp">—</span><a href="https://www.swpc.noaa.gov/products/goes-x-ray-flux" target="_blank" rel="noopener noreferrer">Source: NOAA SWPC · GOES ↗</a></footer>
+      </article>
+      <article class="obs-panel" id="activityPanel">
+        <header class="panel-h"><div><div class="eyebrow">RECENT ACTIVITY · 7 DAYS</div><h3>Flares, alerts &amp; warnings</h3></div></header>
+        <ul class="activity" id="activityList"><li class="muted">Loading NOAA alerts and GOES flare list…</li></ul>
+        <footer class="panel-f"><span id="activityStamp">—</span><a href="https://www.swpc.noaa.gov/products/alerts-watches-and-warnings" target="_blank" rel="noopener noreferrer">Source: NOAA SWPC ↗</a></footer>
+      </article>
+    </div>
+
+    <div class="obs-grid three">
+      <article class="obs-panel" id="auroraPanel">
+        <header class="panel-h"><div><div class="eyebrow">AURORA FORECAST · <span id="auroraHemi">NORTHERN</span> HEMISPHERE</div><h3>Where the lights are likely</h3></div></header>
+        <div class="aurora-body">
+          <figure class="aurora-img"><img id="auroraImg" src="https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg" alt="NOAA OVATION aurora forecast map, northern hemisphere" loading="lazy" referrerpolicy="no-referrer"/></figure>
+          <div class="aurora-facts">
+            <div class="fact"><small>CHANCE OVERHEAD · <span id="auroraPlace">DEFAULT 40°N, 100°W</span> <button type="button" class="loc-change" data-loc-open aria-label="Change your sky location">CHANGE</button></small><strong id="auroraHere">—</strong></div>
+            <div class="fact"><small>PEAK ALONG YOUR LONGITUDE</small><strong id="auroraPeak">—</strong></div>
+            <div class="fact"><small>HEMISPHERE MAX</small><strong id="auroraMax">—</strong></div>
+            <p class="tiny" id="auroraNote">OVATION model, about 30–90 minutes ahead.</p>
+          </div>
+        </div>
+        <footer class="panel-f"><span id="auroraStamp">—</span><a href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener noreferrer">Source: NOAA SWPC OVATION ↗</a></footer>
+      </article>
+      <article class="obs-panel" id="kpForecastPanel">
+        <header class="panel-h"><div><div class="eyebrow">GEOMAGNETIC OUTLOOK</div><h3>Kp: observed &amp; 3-day forecast</h3></div></header>
+        <div class="chart-wrap short"><svg id="kpChart" viewBox="0 0 520 220" preserveAspectRatio="none" role="img" aria-label="Kp observed and forecast"></svg><div class="chart-empty" id="kpEmpty">Loading NOAA Kp forecast…</div></div>
+        <div class="legend"><span class="lg-obs">Observed</span><span class="lg-est">Estimated</span><span class="lg-pred">Predicted</span></div>
+        <div class="probs" id="scaleProbs"></div>
+        <footer class="panel-f"><span id="kpStamp">—</span><a href="https://www.swpc.noaa.gov/products/3-day-forecast" target="_blank" rel="noopener noreferrer">Source: NOAA SWPC ↗</a></footer>
+      </article>
+      <article class="obs-panel" id="sunViews">
+        <header class="panel-h"><div><div class="eyebrow">THE SUN IN FOUR LIGHTS</div><h3>NASA SDO, latest images</h3></div></header>
+        <div class="sun-grid">
+          <figure><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0171.jpg" alt="SDO AIA 171 Å" loading="lazy"/><figcaption>AIA 171 Å · corona loops</figcaption></figure>
+          <figure><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0193.jpg" alt="SDO AIA 193 Å" loading="lazy"/><figcaption>AIA 193 Å · coronal holes</figcaption></figure>
+          <figure><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_0304.jpg" alt="SDO AIA 304 Å" loading="lazy"/><figcaption>AIA 304 Å · chromosphere</figcaption></figure>
+          <figure><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_512_HMIIC.jpg" alt="SDO HMI continuum" loading="lazy"/><figcaption>HMI · sunspots</figcaption></figure>
+        </div>
+        <footer class="panel-f"><span>Capture time is printed at the bottom of each image</span><a href="https://sdo.gsfc.nasa.gov/data/" target="_blank" rel="noopener noreferrer">Source: NASA/SDO ↗</a></footer>
+      </article>
+    </div>
+
+    <details class="more-feeds"><summary>More live feeds from the Hive Astra workbench</summary><div id="signalGrid" class="content-cards"></div></details>
+    <p class="obs-disclaimer">Data: NOAA Space Weather Prediction Center and NASA (SDO, EPIC). Times are shown in your browser’s time zone. Hive Astra is an educational site by Codex Hive Labs. It is not an official forecast and is not affiliated with or endorsed by NOAA or NASA. For warnings, use <a href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">swpc.noaa.gov</a>.</p>
+  </section>
+  <section class="content-panel hidden obs" id="missionsPanel" aria-labelledby="misTitle">
+    <div class="obs-head">
+      <div>
+        <div class="eyebrow gold">FROM THE FRONTIER · MISSIONS</div>
+        <h2 id="misTitle">Mission control, <em>Hive style.</em></h2>
+        <p>Eight NASA missions, from low Earth orbit to the edge of the heliosphere. The facts come from NASA mission pages, checked Nov 19, 2026, and every live item is labeled.</p>
+      </div>
+      <div class="obs-head-side"><div class="obs-updated"><span class="pulse" id="issPulse"></span><span id="issUpdated">Connecting to ISS position feed…</span></div></div>
+    </div>
+
+    <div class="obs-hero mission-hero hex-frame">
+      <svg id="orbitMap" class="orbit-map" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schematic map of where the featured missions operate around Earth, not to scale">
+        <defs>
+          <radialGradient id="sunGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe7a8"/><stop offset=".45" stop-color="#f1a500"/><stop offset="1" stop-color="#f1a500" stop-opacity="0"/></radialGradient>
+          <clipPath id="earthClip"><circle cx="600" cy="260" r="92"/></clipPath>
+          <radialGradient id="earthShade" cx=".35" cy=".35" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+        </defs>
+        <circle cx="40" cy="260" r="120" fill="url(#sunGlow)" opacity=".85"/>
+        <text x="22" y="410" class="om-label">TO THE SUN</text>
+        <g class="om-orbits" fill="none">
+          <ellipse cx="600" cy="260" rx="122" ry="40" class="o-leo"/>
+          <ellipse cx="600" cy="260" rx="175" ry="64" class="o-geo"/>
+          <ellipse cx="600" cy="260" rx="400" ry="150" class="o-moon"/>
+          <path d="M600,168 C760,40 1040,90 1040,200 C1040,330 760,420 690,330 C640,280 640,230 600,168" class="o-artemis"/>
+          <line x1="232" y1="260" x2="508" y2="260" class="o-l1"/>
+          <line x1="692" y1="260" x2="1150" y2="260" class="o-l2"/>
+        </g>
+        <image id="omEarth" x="508" y="168" width="184" height="184" clip-path="url(#earthClip)" preserveAspectRatio="xMidYMid slice"/>
+        <circle cx="600" cy="260" r="92" fill="url(#earthShade)"/>
+        <circle cx="600" cy="260" r="92" fill="none" stroke="rgba(160,200,255,.35)" stroke-width="2"/>
+        <g class="om-moon"><circle cx="1000" cy="226" r="16" fill="#bdbab3"/><circle cx="995" cy="221" r="4" fill="#a19d95"/><circle cx="1005" cy="232" r="3" fill="#a19d95"/></g>
+        <g class="om-points">
+          <g data-m="iss" class="om-pt"><circle id="issDot" cx="705" cy="290" r="6"/><text x="716" y="318">ISS · LEO</text></g>
+          <g data-m="sdo" class="om-pt"><circle cx="438" cy="296" r="6"/><text x="352" y="330">SDO · GEO</text></g>
+          <g data-m="imap" class="om-pt"><circle cx="300" cy="260" r="7"/><text x="262" y="244">IMAP · L1</text></g>
+          <g data-m="webb" class="om-pt"><circle cx="1110" cy="260" r="7"/><text x="1150" y="296" text-anchor="end">WEBB · L2</text></g>
+          <g data-m="artemis2" class="om-pt"><circle cx="1040" cy="200" r="6"/><text x="1000" y="168" text-anchor="middle">ARTEMIS II PATH</text></g>
+        </g>
+      </svg>
+      <div class="om-callout iss-callout"><small>ISS RIGHT NOW · LIVE</small><strong id="issPos">—</strong><span id="issAlt">altitude — · speed —</span></div>
+      <div class="om-callout far-callout"><small>FARTHER OUT</small><span>Europa Clipper → Jupiter (2030)<br/>Psyche → asteroid Psyche (2029)<br/>Parker → close solar orbits<br/>Perseverance → Jezero Crater, Mars</span></div>
+      <div class="hero-caption">Schematic, not to scale. Positions are illustrative except the ISS readout, which is live. L1 and L2 are about 1.5 million km from Earth, and the Moon about 384,000 km. Earth image: NASA EPIC.</div>
+    </div>
+
+    <div class="mission-console">
+      <aside class="mission-list-wrap obs-panel">
+        <header class="panel-h"><div><div class="eyebrow">MISSION DIRECTORY</div><h3>Choose a mission</h3></div></header>
+        <div class="m-filters" role="tablist" aria-label="Filter missions">
+          <button class="chip active" data-f="all">All</button><button class="chip" data-f="active">Operating</button><button class="chip" data-f="cruise">En route</button><button class="chip" data-f="done">Completed</button>
+        </div>
+        <ul class="mission-list" id="missionList" role="listbox" aria-label="Missions"></ul>
+      </aside>
+      <article class="mission-detail obs-panel" id="missionDetail" aria-live="polite"></article>
+    </div>
+
+    <div class="featured-head"><div class="eyebrow gold">FEATURED MISSIONS</div><span class="tiny">Images: NASA. Artist's concepts are labeled.</span></div>
+    <div class="featured-row" id="featuredRow"></div>
+    <div id="missionGrid" hidden></div>
+    <p class="obs-disclaimer">Mission facts come from NASA mission pages (linked on each mission), checked Nov 19, 2026. Hive Astra is an educational site by Codex Hive Labs and is not affiliated with or endorsed by NASA.</p>
+  </section>
+  <section class="content-panel hidden" id="learnPanel"><div class="content-top"><div class="eyebrow gold">HIVE ACADEMY</div><h2>Look closer. Understand more.</h2><p>Learn the science behind orbits, space weather, and the astronomical observations you explore. Open any field guide for a short, hands-on lesson.</p></div><div class="content-cards" id="lessonGrid"></div></section>
+  <section class="content-panel hidden" id="aboutPanel"><div class="content-top"><div class="eyebrow gold">ABOUT THE PROJECT</div><h2>Hive Astra.</h2><p>An exploratory astronomy workbench by Codex Hive Labs—where interactive visualization meets real scientific observations.</p></div><div class="about-split"><img class="about-logo" src="assets/hive-astra-emblem.webp" alt="Hive Astra official emblem"/><div><h3>Built to inspire exploration.</h3><p>The interactive orrery uses simplified orbital elements and deliberately exaggerated visual sizes. This is a learning and discovery experience, not a navigation-grade ephemeris.</p><p>Live observations are labeled by source and distinguished from orbital estimates, predictions, and illustrations. No agency endorsement is implied.</p><button class="gold-button" id="aboutSources">View source references ↗</button></div></div></section>
+
+  <footer class="site-footer"><span>© <span id="year"></span> CODEX HIVE LABS LLC</span><span class="footer-center">HIVE ASTRA <span class="gold">✦</span> INTELLIGENCE IN COMPLEX SYSTEMS</span><button id="footerSources">DATA SOURCES &amp; ATTRIBUTION ↗</button></footer>
+</div>
+<div class="modal-backdrop hidden" id="modalBackdrop"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="Close">×</button><div class="eyebrow gold">HIVE ASTRA</div><h2 id="modalTitle">Data sources</h2><div id="modalBody"></div></div></div>
+<script src="globe.js" defer></script>
+<script src="epic.js" defer></script>
+<script src="app.js" defer></script>
+<script src="location.js" defer></script>
+<script src="observatory.js" defer></script>
+<script src="lessons.js" defer></script>
+</body>
+</html>
